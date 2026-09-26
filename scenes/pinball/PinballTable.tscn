@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://bibie5uxpm0rm"]
+
+[ext_resource type="Script" uid="uid://bxcqwwgyw071x" path="res://scripts/physics/PinballController.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://c735vwnxgmtc3" path="res://scenes/pinball/BevoBall.tscn" id="2_ball"]
+[ext_resource type="Texture2D" uid="uid://d0x2phql0onc1" path="res://art-assets/ui/Elemental_Bumper.png" id="3_bumper"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
+bounce = 1.6
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bumper"]
+radius = 12.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_flipper"]
+size = Vector2(115, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_drain"]
+size = Vector2(800, 50)
+
+[node name="PinballTable" type="Node2D" unique_id=2069753559]
+script = ExtResource("1_script")
+
+[node name="BevoBall" parent="." unique_id=1291116846 instance=ExtResource("2_ball")]
+position = Vector2(535, 520)
+
+[node name="Bumpers" type="Node2D" parent="." unique_id=1194494422]
+
+[node name="Bumper1" type="StaticBody2D" parent="Bumpers" unique_id=436842858]
+position = Vector2(250, 100)
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper1" unique_id=1572185373]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_bumper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper1" unique_id=315841680]
+shape = SubResource("CircleShape2D_bumper")
+
+[node name="Bumper2" type="StaticBody2D" parent="Bumpers" unique_id=217969656]
+position = Vector2(160, 180)
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper2" unique_id=1965554465]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_bumper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper2" unique_id=111379720]
+shape = SubResource("CircleShape2D_bumper")
+
+[node name="Bumper3" type="StaticBody2D" parent="Bumpers" unique_id=735390005]
+position = Vector2(340, 180)
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper3" unique_id=1890489927]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_bumper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper3" unique_id=1083230875]
+shape = SubResource("CircleShape2D_bumper")
+
+[node name="Flippers" type="Node2D" parent="." unique_id=1755207357]
+
+[node name="LeftFlipper" type="AnimatableBody2D" parent="Flippers" unique_id=562195799]
+position = Vector2(121.00003, 571)
+rotation = 0.45
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippers/LeftFlipper" unique_id=1519090450]
+position = Vector2(57, 0)
+shape = SubResource("RectangleShape2D_flipper")
+
+[node name="ColorRect" type="ColorRect" parent="Flippers/LeftFlipper" unique_id=1317101411]
+offset_top = -12.0
+offset_right = 115.0
+offset_bottom = 12.0
+color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="RightFlipper" type="AnimatableBody2D" parent="Flippers" unique_id=910145351]
+position = Vector2(382, 570)
+rotation = -0.45
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippers/RightFlipper" unique_id=1471452771]
+position = Vector2(-57.00003, 6.1035156e-05)
+shape = SubResource("RectangleShape2D_flipper")
+
+[node name="ColorRect" type="ColorRect" parent="Flippers/RightFlipper" unique_id=2140992801]
+offset_left = -115.0
+offset_top = -12.0
+offset_bottom = 12.0
+color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="Plunger" type="AnimatableBody2D" parent="." unique_id=303713677]
+position = Vector2(535, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Plunger" unique_id=2053001665]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_flipper")
+
+[node name="ColorRect" type="ColorRect" parent="Plunger" unique_id=1389338666]
+offset_left = -15.0
+offset_top = -10.0
+offset_right = 15.0
+offset_bottom = 40.0
+color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="StaticEnvironment" type="StaticBody2D" parent="." unique_id=893622171]
+
+[node name="OuterShell" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1998701843]
+polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -50, -50, -50, -50, 648, 0, 648)
+
+[node name="OuterVisual" type="Polygon2D" parent="StaticEnvironment" unique_id=1255592296]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -50, -50, -50, -50, 648, 0, 648)
+
+[node name="PlungerDivider" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1486600382]
+polygon = PackedVector2Array(495, 648, 495, 180, 505, 180, 505, 648)
+
+[node name="DividerVisual" type="Polygon2D" parent="StaticEnvironment" unique_id=381185003]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = PackedVector2Array(495, 648, 495, 180, 505, 180, 505, 648)
+
+[node name="LeftSlingshot" type="StaticBody2D" parent="StaticEnvironment" unique_id=1781501963]
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=125095784]
+polygon = PackedVector2Array(40, 430, 100, 500, 100, 540, 40, 540)
+
+[node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=843280319]
+color = Color(0.35, 0.35, 0.35, 1)
+polygon = PackedVector2Array(40, 430, 100, 500, 100, 540, 40, 540)
+
+[node name="RightSlingshot" type="StaticBody2D" parent="StaticEnvironment" unique_id=1295052989]
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=1600816620]
+polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
+
+[node name="Visual" type="Polygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=95379997]
+color = Color(0.35, 0.35, 0.35, 1)
+polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
+
+[node name="LeftInlaneDivider" type="StaticBody2D" parent="StaticEnvironment" unique_id=814247025]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/LeftInlaneDivider" unique_id=2068714849]
+polygon = PackedVector2Array(20, 380, 30, 380, 30, 520, 20, 520)
+
+[node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftInlaneDivider" unique_id=2035581073]
+color = Color(0.4, 0.4, 0.8, 1)
+polygon = PackedVector2Array(20, 380, 30, 380, 30, 520, 20, 520)
+
+[node name="RightInlaneDivider" type="StaticBody2D" parent="StaticEnvironment" unique_id=1179487517]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/RightInlaneDivider" unique_id=742009913]
+polygon = PackedVector2Array(470, 380, 480, 380, 480, 520, 470, 520)
+
+[node name="Visual" type="Polygon2D" parent="StaticEnvironment/RightInlaneDivider" unique_id=767161725]
+color = Color(0.4, 0.4, 0.8, 1)
+polygon = PackedVector2Array(470, 380, 480, 380, 480, 520, 470, 520)
+
+[node name="DrainZone" type="Area2D" parent="." unique_id=1249235281]
+position = Vector2(250, 670)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DrainZone" unique_id=985984326]
+position = Vector2(9, 29)
+shape = SubResource("RectangleShape2D_drain")
+
+[connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]

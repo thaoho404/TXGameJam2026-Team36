@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c735vwnxgmtc3"]
+
+[ext_resource type="Script" uid="uid://ol3ton8lsl5l" path="res://scripts/physics/BevoBall.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bll6t05b3jivm" path="res://art-assets/sprites/Player_Bevo.png" id="2_sprite"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ball"]
+bounce = 0.25
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ball"]
+radius = 28.0
+
+[node name="BevoBall" type="RigidBody2D" unique_id=1594381274]
+physics_material_override = SubResource("PhysicsMaterial_ball")
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 3
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=402894833]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_sprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=509219423]
+shape = SubResource("CircleShape2D_ball")

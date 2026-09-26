@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="PinRoulette"
+run/main_scene="uid://b8y4g5v1x2q3"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 
 [physics]
 
