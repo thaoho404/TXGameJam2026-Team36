@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://mpbv6q6kve76"]
+
+[ext_resource type="Script" uid="uid://clfnf5drmejoi" path="res://scripts/physics/Slingshot.gd" id="1_script"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bounce"]
+bounce = 0.5
+
+[node name="Slingshot" type="StaticBody2D" unique_id=405404500]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_bounce")
+script = ExtResource("1_script")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=233170799]
+color = Color(0.8, 0.4, 0.1, 1)
+polygon = PackedVector2Array(-20, 60, 20, 0, -20, -60)
+
+[node name="PhysicalWall" type="CollisionPolygon2D" parent="." unique_id=41515045]
+position = Vector2(0.5, 0)
+scale = Vector2(0.984375, 1)
+polygon = PackedVector2Array(-30.984129, 104, 20, 0, -35.047623, -115)
+
+[node name="KickerTrigger" type="Area2D" parent="." unique_id=1379597143]
+
+[node name="TriggerShape" type="CollisionPolygon2D" parent="KickerTrigger" unique_id=1178924870]
+polygon = PackedVector2Array(11, 45, 30, 0, 11, -54)
+
+[connection signal="body_entered" from="KickerTrigger" to="." method="_on_kicker_trigger_body_entered"]

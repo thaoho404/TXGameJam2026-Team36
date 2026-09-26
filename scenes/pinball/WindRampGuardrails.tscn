@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cm38b6y62y5w1"]
+
+[node name="WindRampGuardrails" type="StaticBody2D" unique_id=1336679284]
+collision_layer = 2
+collision_mask = 0
+
+[node name="LeftWall" type="CollisionPolygon2D" parent="." unique_id=1887757501]
+position = Vector2(-21, 20)
+polygon = PackedVector2Array(-30, 150, -89, -105, -25, -315, -51, -288, -96, -224, -109, -159, -114, -102, -51, 158)
+
+[node name="RightWall" type="CollisionPolygon2D" parent="." unique_id=1039063638]
+polygon = PackedVector2Array(30, 150, 30, -150, 50, -150, 50, 150)

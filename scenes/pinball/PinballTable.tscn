@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://bxcqwwgyw071x" path="res://scripts/physics/PinballController.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c735vwnxgmtc3" path="res://scenes/pinball/BevoBall.tscn" id="2_ball"]
 [ext_resource type="Texture2D" uid="uid://d0x2phql0onc1" path="res://art-assets/ui/Elemental_Bumper.png" id="3_bumper"]
+[ext_resource type="PackedScene" path="res://scenes/pinball/LaunchGate.tscn" id="4_17vu6"]
+[ext_resource type="PackedScene" path="res://scenes/pinball/RampTrigger.tscn" id="5_rinyx"]
+[ext_resource type="PackedScene" uid="uid://cm38b6y62y5w1" path="res://scenes/pinball/WindRampGuardrails.tscn" id="6_evd0j"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
 bounce = 1.6
@@ -60,7 +63,7 @@ shape = SubResource("CircleShape2D_bumper")
 [node name="Flippers" type="Node2D" parent="." unique_id=1755207357]
 
 [node name="LeftFlipper" type="AnimatableBody2D" parent="Flippers" unique_id=562195799]
-position = Vector2(121.00003, 571)
+position = Vector2(124, 568.00006)
 rotation = 0.45
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Flippers/LeftFlipper" unique_id=1519090450]
@@ -102,6 +105,7 @@ offset_bottom = 40.0
 color = Color(0.7, 0.7, 0.7, 1)
 
 [node name="StaticEnvironment" type="StaticBody2D" parent="." unique_id=893622171]
+collision_layer = 3
 
 [node name="OuterShell" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1998701843]
 polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -50, -50, -50, -50, 648, 0, 648)
@@ -134,6 +138,8 @@ physics_material_override = SubResource("PhysicsMaterial_bumper")
 polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=95379997]
+position = Vector2(-23, -34.363647)
+scale = Vector2(1.05, 1.0636364)
 color = Color(0.35, 0.35, 0.35, 1)
 polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
 
@@ -162,4 +168,36 @@ position = Vector2(250, 670)
 position = Vector2(9, 29)
 shape = SubResource("RectangleShape2D_drain")
 
+[node name="LaunchGate" parent="." unique_id=2086909175 instance=ExtResource("4_17vu6")]
+position = Vector2(539, 187)
+
+[node name="RampTrigger" parent="." unique_id=1936923739 instance=ExtResource("5_rinyx")]
+position = Vector2(83, 355)
+
+[node name="RailVisual" type="Line2D" parent="RampTrigger" unique_id=99420185]
+position = Vector2(-1, 0)
+points = PackedVector2Array(-7, -3, -36, -58, -55, -144, -42, -223, 19, -300)
+width = 30.0
+
+[node name="RampTrigger2" parent="." unique_id=341281174 instance=ExtResource("5_rinyx")]
+position = Vector2(97, 63)
+trigger_type = "Exit"
+
+[node name="LaunchGate2" parent="." unique_id=1916518803 instance=ExtResource("4_17vu6")]
+position = Vector2(107, 55)
+
+[node name="WindRampGuardrails" parent="." unique_id=2033045788 instance=ExtResource("6_evd0j")]
+position = Vector2(149, 299)
+
+[node name="LeftWall" parent="WindRampGuardrails" index="0" unique_id=1887757501]
+position = Vector2(-107.04449, -106.333534)
+polygon = PackedVector2Array(21.044487, 160.33353, -9.955513, 112.333534, -15.955513, 82.33353, -29.955513, 19.333534, -18.955513, -56.666466, 45.044487, -139.66647, 40.044487, -146.66647, 8.044487, -104.666466, -23.955513, -66.666466, -34.0121, 6.824066, -36.955513, 28.333534, -33.955513, 50.333527, -26.955513, 78.33353, -14.955513, 115.333534, 14.044487, 166.33353)
+
+[node name="RightWall" parent="WindRampGuardrails" index="1" unique_id=1039063638]
+position = Vector2(-99.74999, -101)
+scale = Vector2(1.1562499, 1)
+polygon = PackedVector2Array(37.837833, 150, 28.324322, 124, 16.216213, 96, 4.972969, 44, 1.5135078, 20, 4.1081047, 0, 5.8378334, -12, 6.7026978, -43, 7.567562, -59, 13.62162, -66, 32.648647, -91, 58.594593, -130, 68.108116, -120, 50.81081, -97, 26.594593, -70, 15.351349, -39, 14.486485, 1, 15.351349, 46, 23.135132, 82, 26.594593, 99, 40.43243, 127, 45.621624, 143)
+
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
+
+[editable path="WindRampGuardrails"]
