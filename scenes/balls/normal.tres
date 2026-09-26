@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BallType" format=3 uid="uid://bgndydfwv0db7"]
+
+[ext_resource type="Script" uid="uid://cmrsimduhflgn" path="res://scripts/core/resources/BallType.gd" id="1_s8lsy"]
+
+[resource]
+script = ExtResource("1_s8lsy")
+id = "normal"
+display_name = "Normal"
+metadata/_custom_type_script = "uid://cmrsimduhflgn"

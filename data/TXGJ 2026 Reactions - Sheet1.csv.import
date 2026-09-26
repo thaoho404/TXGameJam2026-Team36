@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://caa5cfocf6v8x"
+
+[deps]
+
+files=["res://data/TXGJ 2026 Reactions - Sheet1.Normal.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Fire.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Water.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Grass.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Earth.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Electric.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Ice.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Wind.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Dark.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Steel.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Fairy.translation"]
+
+source_file="res://data/TXGJ 2026 Reactions - Sheet1.csv"
+dest_files=["res://data/TXGJ 2026 Reactions - Sheet1.Normal.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Fire.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Water.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Grass.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Earth.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Electric.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Ice.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Wind.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Dark.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Steel.translation", "res://data/TXGJ 2026 Reactions - Sheet1.Fairy.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

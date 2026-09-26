@@ -16,7 +16,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=331379869]
+[node name="MainMenu" type="Control" parent="." unique_id=370771292]
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="UpgradeMenu" type="Control" parent="MainMenu" unique_id=1047664814]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CreditMenu" type="Control" parent="MainMenu" unique_id=1891105193]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GamePlay" type="Control" parent="MainMenu" unique_id=520767378]
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainMenu/GamePlay" unique_id=331379869]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,12 +45,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CombatUI" type="ColorRect" parent="HBoxContainer" unique_id=1122877026]
+[node name="CombatUI" type="ColorRect" parent="MainMenu/GamePlay/HBoxContainer" unique_id=1122877026]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.2, 0.15, 0.15, 1)
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="HBoxContainer/CombatUI" unique_id=1426188693]
+[node name="EnemyHealthBar" type="ProgressBar" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1426188693]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -42,7 +63,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_health")
 value = 100.0
 show_percentage = false
 
-[node name="DialogueBox" type="TextureRect" parent="HBoxContainer/CombatUI" unique_id=1677895318]
+[node name="DialogueBox" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1677895318]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 70.0
@@ -52,7 +73,7 @@ texture = ExtResource("3_ui")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EnemySprite" type="TextureRect" parent="HBoxContainer/CombatUI" unique_id=93875696]
+[node name="EnemySprite" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=93875696]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -69,7 +90,7 @@ texture = ExtResource("2_enemy")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ScorePanel" type="TextureRect" parent="HBoxContainer/CombatUI" unique_id=913734246]
+[node name="ScorePanel" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=913734246]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -86,7 +107,7 @@ texture = ExtResource("3_ui")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayerBevo" type="TextureRect" parent="HBoxContainer/CombatUI" unique_id=287280531]
+[node name="PlayerBevo" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=287280531]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -100,14 +121,14 @@ texture = ExtResource("1_bevo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PinballBoard" type="SubViewportContainer" parent="HBoxContainer" unique_id=2098449194]
+[node name="PinballBoard" type="SubViewportContainer" parent="MainMenu/GamePlay/HBoxContainer" unique_id=2098449194]
 layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="HBoxContainer/PinballBoard" unique_id=228156627]
+[node name="SubViewport" type="SubViewport" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard" unique_id=228156627]
 handle_input_locally = false
-size = Vector2i(574, 648)
-render_target_update_mode = 4
+size = Vector2i(2, 2)
+render_target_update_mode = 0
 
-[node name="PinballTable" parent="HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
+[node name="PinballTable" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
