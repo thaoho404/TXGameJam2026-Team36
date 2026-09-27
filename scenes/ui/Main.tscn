@@ -1,12 +1,42 @@
 [gd_scene format=3 uid="uid://b8y4g5v1x2q3"]
 
 [ext_resource type="Texture2D" uid="uid://bll6t05b3jivm" path="res://art-assets/sprites/Player_Bevo.png" id="1_bevo"]
+[ext_resource type="Script" uid="uid://csrtnhvh88wnw" path="res://scenes/ui/main.gd" id="1_yvcut"]
 [ext_resource type="Texture2D" uid="uid://xcgtk2wu53cq" path="res://art-assets/sprites/Enemy_Sprite.png" id="2_enemy"]
+[ext_resource type="Texture2D" uid="uid://d1cigp5uvpds6" path="res://art-assets/sprites/Go Back Button.png" id="2_thnqr"]
 [ext_resource type="Texture2D" uid="uid://c14vfgre5j6eb" path="res://art-assets/ui/UI_Panel.png" id="3_ui"]
+[ext_resource type="Texture2D" uid="uid://dv8jd8he0iykx" path="res://art-assets/background/title_screen_with_borders.png" id="5_fss6w"]
 [ext_resource type="PackedScene" uid="uid://bibie5uxpm0rm" path="res://scenes/pinball/PinballTable.tscn" id="5_table"]
+[ext_resource type="Texture2D" uid="uid://bjpwps0g6prn" path="res://art-assets/sprites/Play Button.png" id="6_yvcut"]
+[ext_resource type="Texture2D" uid="uid://dv7kvbmaults7" path="res://art-assets/sprites/Exit Button.png" id="7_thnqr"]
+[ext_resource type="Texture2D" uid="uid://c42hrr28l3j6" path="res://art-assets/sprites/Credits Button.png" id="8_gl1th"]
+[ext_resource type="Texture2D" uid="uid://c180kbvn4jgb8" path="res://art-assets/sprites/Upgrade Button.png" id="9_upid4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ft73y"]
+atlas = ExtResource("2_thnqr")
+region = Rect2(224.79283, 425.08276, 1179.6998, 295.81537)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
 bg_color = Color(0.8, 0.15, 0.15, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_a3qfc"]
+texture = ExtResource("5_fss6w")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b6vyq"]
+atlas = ExtResource("6_yvcut")
+region = Rect2(433.1, 450.6, 707.09985, 259.20004)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_317g0"]
+atlas = ExtResource("7_thnqr")
+region = Rect2(451.6997, 442.04993, 653.3003, 263.25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8w7p"]
+atlas = ExtResource("8_gl1th")
+region = Rect2(227.22815, 461.69574, 1170.3999, 241.79694)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a3qfc"]
+atlas = ExtResource("9_upid4")
+region = Rect2(162.06805, 481.67352, 1252.7136, 244.3692)
 
 [node name="Main" type="Control" unique_id=1426743038]
 layout_mode = 3
@@ -15,6 +45,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_yvcut")
 
 [node name="MainMenu" type="Control" parent="." unique_id=370771292]
 layout_mode = 1
@@ -25,6 +56,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="UpgradeMenu" type="Control" parent="MainMenu" unique_id=1047664814]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,13 +64,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CreditMenu" type="Control" parent="MainMenu" unique_id=1891105193]
+[node name="Panel" type="Panel" parent="MainMenu/UpgradeMenu" unique_id=1563712382]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BackButton" type="TextureButton" parent="MainMenu/UpgradeMenu/Panel" unique_id=1944968351]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_ft73y")
+
+[node name="CreditMenu" type="Control" parent="MainMenu" unique_id=1891105193]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="MainMenu/CreditMenu" unique_id=1269088095]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButton" type="TextureButton" parent="MainMenu/CreditMenu/Panel" unique_id=2065268987]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_ft73y")
 
 [node name="GamePlay" type="Control" parent="MainMenu" unique_id=520767378]
 visible = false
@@ -140,7 +203,68 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard" unique_id=228156627]
 handle_input_locally = false
-size = Vector2i(574, 648)
+size = Vector2i(2, 2)
 render_target_update_mode = 0
 
 [node name="PinballTable" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
+
+[node name="Panel" type="Panel" parent="MainMenu" unique_id=191818130]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_a3qfc")
+
+[node name="PlayButton" type="TextureButton" parent="MainMenu/Panel" unique_id=1686843982]
+layout_mode = 1
+offset_left = 384.0
+offset_top = 224.00002
+offset_right = 1791.5342
+offset_bottom = 674.6
+rotation = -0.09599311
+scale = Vector2(0.13, 0.13)
+texture_normal = SubResource("AtlasTexture_b6vyq")
+stretch_mode = 5
+
+[node name="ExitButton" type="TextureButton" parent="MainMenu/Panel" unique_id=1913777843]
+layout_mode = 0
+offset_left = 435.99997
+offset_top = 536.00006
+offset_right = 1089.0
+offset_bottom = 799.00006
+rotation = -0.09599311
+scale = Vector2(0.125, 0.125)
+texture_normal = SubResource("AtlasTexture_317g0")
+stretch_mode = 5
+
+[node name="CreditsButton" type="TextureButton" parent="MainMenu/Panel" unique_id=358355767]
+layout_mode = 0
+offset_left = 629.0
+offset_top = 496.99997
+offset_right = 1799.0
+offset_bottom = 738.0
+rotation = -0.07853982
+scale = Vector2(0.11, 0.11)
+texture_normal = SubResource("AtlasTexture_p8w7p")
+stretch_mode = 5
+
+[node name="UpgradeButton" type="TextureButton" parent="MainMenu/Panel" unique_id=383161124]
+layout_mode = 0
+offset_left = 622.0
+offset_top = 396.00003
+offset_right = 1874.0
+offset_bottom = 640.00006
+rotation = -0.07853982
+scale = Vector2(0.1, 0.1)
+texture_normal = SubResource("AtlasTexture_a3qfc")
+stretch_mode = 5
+
+[connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/CreditMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/Panel/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MainMenu/Panel/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="MainMenu/Panel/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="MainMenu/Panel/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
