@@ -238,6 +238,8 @@ func _test_main_scene() -> void:
 	main._refresh_gacha()
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await process_frame
+	# Use a known non-healing reaction so random typing cannot change the HP assertions.
+	board._bumper_types[bumper] = BevoData.ElementType.FIRE
 	_check(main.enemy_sprite.texture == main.boss_1_texture,
 		"A new run shows the first boss sprite")
 	_check(main.game_screen.visible and not main.gacha_screen.visible
@@ -253,7 +255,13 @@ func _test_main_scene() -> void:
 		"Real plunger launch starts the combat turn through its signal")
 	# Inject a contact notification to exercise the actual connected board signal.
 	# Physical ball trajectories are deliberately excluded from this deterministic test.
+	board.ball.freeze = true
 	board.ball.body_entered.emit(bumper)
+	var first_hit_score: int = manager.turn_score
+	board.ball.body_entered.emit(bumper)
+	_check(manager.turn_score == first_hit_score,
+		"Rapid repeat contact with one bumper is counted only once")
+	await create_timer(board.bumper_score_cooldown_seconds + 0.02).timeout
 	board.ball.body_entered.emit(bumper)
 	var reaction := ReactionTable.new().get_reaction(board._bumper_types[bumper], manager.selected_ball.element)
 	var strength: float = manager.selected_ball.reaction_strength_mult

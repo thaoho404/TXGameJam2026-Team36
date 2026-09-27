@@ -66,6 +66,14 @@ func _run() -> void:
 	_check(board.get_node("LaunchGate").collision_layer & 2 != 0
 		and lowest_y < 180.0, "Launch gate blocks a returning ball on the ramp collision layer")
 
+	# Isolate the springs: the new nearby wheel bumpers can immediately hit the
+	# rebounding ball, reverse its velocity, and legitimately award their own score.
+	var bumper_layers: Dictionary = {}
+	for bumper in board.get_node("Bumpers").get_children():
+		bumper_layers[bumper] = Vector2i(bumper.collision_layer, bumper.collision_mask)
+		bumper.collision_layer = 0
+		bumper.collision_mask = 0
+	await physics_frame
 	var score_before_springs: int = manager.turn_score
 	var spring_checks := [
 		["LeftSpringBumper", Vector2(92, 474), Vector2(-400, 200)],
@@ -86,6 +94,9 @@ func _run() -> void:
 			"%s pushes the ball toward the playfield" % spring_check[0])
 	_check(manager.turn_score == score_before_springs,
 		"Spring bumper contacts do not award elemental points")
+	for bumper in bumper_layers:
+		bumper.collision_layer = bumper_layers[bumper].x
+		bumper.collision_mask = bumper_layers[bumper].y
 
 	# A fast rebound near the upper bumper previously escaped through the ceiling.
 	board.ball.freeze = true
