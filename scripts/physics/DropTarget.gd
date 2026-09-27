@@ -18,7 +18,17 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	
 	# Wait 5 seconds, then pop back up
 	await get_tree().create_timer(5.0).timeout
+	# Restoring the wall around the ball can eject it at high speed.
+	while _ball_overlaps_hitbox():
+		await get_tree().physics_frame
 	
 	is_dropped = false
 	$VisualPlaceholder.show()
 	$SolidWall.set_deferred("disabled", false)
+
+
+func _ball_overlaps_hitbox() -> bool:
+	for body in $Hitbox.get_overlapping_bodies():
+		if body.name == "BevoBall":
+			return true
+	return false

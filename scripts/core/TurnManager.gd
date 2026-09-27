@@ -1,65 +1,125 @@
 class_name TurnManager
 extends Node
 
-enum BattleState { PREP, BALL_IN_PLAY, DAMAGE_CALCULATION, ENEMY_PHASE, CHECK_STATUS, GAME_OVER, VICTORY }
+enum BattleState { IDLE, PREP, BALL_IN_PLAY, DAMAGE_CALCULATION, ENEMY_PHASE, GAME_OVER, VICTORY }
 
 signal state_changed(new_state: BattleState)
+signal battle_updated()
 signal turn_combo_updated(current_hits: int, preview_damage: int)
+signal turn_ready()
+signal battle_finished(player_won: bool)
 
-@export var player_hp: int = 100
-@export var enemy_hp: int = 200
-@export var base_gravity: float = 980.0
-@export var gravity_ramp_rate: float = 35.0 
+@export_range(1, 999999, 1) var player_max_hp: int = 100
+@export_range(1, 999999, 1) var enemy_max_hp: int = 200
+@export_range(0, 999999, 1) var enemy_base_damage: int = 15
+@export_range(0.0, 5.0, 0.05) var player_attack_delay: float = 0.5
+@export_range(0.0, 5.0, 0.05) var enemy_attack_delay: float = 0.8
 
-var current_state: BattleState = BattleState.PREP
-var active_bevo: BevoData
-var hit_events: Array[Dictionary] = [] 
-var turn_elapsed_time: float = 0.0
+var current_state: BattleState = BattleState.IDLE
+var player_hp: int = 100
+var enemy_hp: int = 200
+var turn_score: int = 0
+var current_hits: int = 0
+var turn_number: int = 0
+var last_player_damage: int = 0
+var last_enemy_damage: int = 0
+var total_damage_dealt: int = 0
+
+# Invalidates delayed attacks when the player leaves or starts another battle.
+var _battle_id: int = 0
+
 
 func _ready() -> void:
-	change_state(BattleState.PREP)
+	player_hp = player_max_hp
+	enemy_hp = enemy_max_hp
 
-func _process(delta: float) -> void:
-	if current_state == BattleState.BALL_IN_PLAY:
-		turn_elapsed_time += delta
-		var current_gravity = base_gravity + (turn_elapsed_time * gravity_ramp_rate)
-		PhysicsServer2D.area_set_param(get_viewport().find_world_2d().space, PhysicsServer2D.AREA_PARAM_GRAVITY, current_gravity)
 
-func change_state(new_state: BattleState) -> void:
-	current_state = new_state
-	emit_signal("state_changed", new_state)
-	match current_state:
-		BattleState.PREP: _enter_prep_phase()
-		BattleState.BALL_IN_PLAY: print("BALL LAUNCHED")
-		BattleState.DAMAGE_CALCULATION: _resolve_damage_queue()
-		BattleState.ENEMY_PHASE: _execute_enemy_turn()
-		BattleState.CHECK_STATUS: _check_battle_status()
+func start_battle() -> void:
+	_battle_id += 1
+	player_hp = player_max_hp
+	enemy_hp = enemy_max_hp
+	turn_number = 0
+	last_player_damage = 0
+	last_enemy_damage = 0
+	total_damage_dealt = 0
+	_prepare_next_turn()
 
-func _enter_prep_phase() -> void:
-	hit_events.clear()
-	turn_elapsed_time = 0.0
-	PhysicsServer2D.area_set_param(get_viewport().find_world_2d().space, PhysicsServer2D.AREA_PARAM_GRAVITY, base_gravity)
 
-func register_board_hit(element_triggered: BevoData.ElementType, flat_dmg: int) -> void:
-	if current_state != BattleState.BALL_IN_PLAY: return
-	hit_events.append({"element": element_triggered, "damage": flat_dmg})
-	
+func stop_battle() -> void:
+	_battle_id += 1
+	_change_state(BattleState.IDLE)
+
+
+func on_ball_launched() -> void:
+	if current_state != BattleState.PREP:
+		return
+	turn_number += 1
+	_change_state(BattleState.BALL_IN_PLAY)
+
+
+func register_board_hit(_element: BevoData.ElementType, points: int) -> void:
+	if current_state != BattleState.BALL_IN_PLAY or points <= 0:
+		return
+	current_hits += 1
+	turn_score += points
+	turn_combo_updated.emit(current_hits, turn_score)
+	battle_updated.emit()
+
+
 func on_ball_drained() -> void:
-	if current_state == BattleState.BALL_IN_PLAY: change_state(BattleState.DAMAGE_CALCULATION)
+	if current_state != BattleState.BALL_IN_PLAY:
+		return
 
-func _resolve_damage_queue() -> void:
-	for event in hit_events:
-		enemy_hp = max(0, enemy_hp - event["damage"])
-		await get_tree().create_timer(0.4).timeout
-		if enemy_hp <= 0: break
-	change_state(BattleState.CHECK_STATUS)
+	var resolving_battle: int = _battle_id
+	# The entire final score is applied once. HP is clamped against overkill.
+	last_player_damage = mini(turn_score, enemy_hp)
+	enemy_hp = maxi(0, enemy_hp - turn_score)
+	total_damage_dealt += last_player_damage
+	_change_state(BattleState.DAMAGE_CALCULATION)
 
-func _execute_enemy_turn() -> void:
-	player_hp -= 15
-	await get_tree().create_timer(0.8).timeout
-	change_state(BattleState.CHECK_STATUS)
+	await get_tree().create_timer(player_attack_delay).timeout
+	if not _can_resume(resolving_battle):
+		return
+	if enemy_hp == 0:
+		_finish_battle(true)
+		return
 
-func _check_battle_status() -> void:
-	if enemy_hp <= 0: change_state(BattleState.VICTORY)
-	elif player_hp <= 0: change_state(BattleState.GAME_OVER)
-	else: change_state(BattleState.PREP)
+	last_enemy_damage = mini(enemy_base_damage, player_hp)
+	player_hp = maxi(0, player_hp - enemy_base_damage)
+	_change_state(BattleState.ENEMY_PHASE)
+
+	await get_tree().create_timer(enemy_attack_delay).timeout
+	if not _can_resume(resolving_battle):
+		return
+	if player_hp == 0:
+		_finish_battle(false)
+		return
+
+	_prepare_next_turn()
+
+
+func _prepare_next_turn() -> void:
+	turn_score = 0
+	current_hits = 0
+	turn_combo_updated.emit(current_hits, turn_score)
+	_change_state(BattleState.PREP)
+	turn_ready.emit()
+
+
+func _finish_battle(player_won: bool) -> void:
+	_change_state(BattleState.VICTORY if player_won else BattleState.GAME_OVER)
+	battle_finished.emit(player_won)
+
+
+func _change_state(new_state: BattleState) -> void:
+	current_state = new_state
+	state_changed.emit(new_state)
+	battle_updated.emit()
+
+
+func _can_resume(resolving_battle: int) -> bool:
+	return is_inside_tree() and resolving_battle == _battle_id
+
+
+func _exit_tree() -> void:
+	_battle_id += 1
