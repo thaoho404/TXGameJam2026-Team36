@@ -148,7 +148,7 @@ func _refresh_gacha() -> void:
 		roll_label.text = "No ball types are available."
 		$MainMenu/GachaMenu/Panel/ReadyButton.disabled = true
 		return
-	roll_label.text = "%s  •  %s\n%s\n\nOne element for the full run." % [chosen.display_name, BallType.Rarity.keys()[chosen.rarity].capitalize(), chosen.description]
+	roll_label.text = "%s  •  %s\n%s" % [chosen.display_name, BallType.Rarity.keys()[chosen.rarity].capitalize(), chosen.description]
 	reroll_button.text = "Reroll (%d left)" % profile.rerolls_left
 	reroll_button.disabled = profile.rerolls_left <= 0
 	$MainMenu/GachaMenu/Panel/ReadyButton.disabled = false

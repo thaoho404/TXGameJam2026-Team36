@@ -105,7 +105,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="UpgradeMenu" type="Control" parent="MainMenu" unique_id=1047664814]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -128,23 +127,8 @@ offset_bottom = 40.0
 scale = Vector2(0.3, 0.3)
 texture_normal = SubResource("AtlasTexture_ft73y")
 
-[node name="TempText" type="TextEdit" parent="MainMenu/UpgradeMenu/Panel" unique_id=42912294]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -389.0
-offset_top = -115.0
-offset_right = 111.0
-offset_bottom = -65.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(5, 5)
-text = "UPGRADE SCREEN TEMP"
-
 [node name="GachaMenu" type="Control" parent="MainMenu" unique_id=485860850]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -201,7 +185,7 @@ grow_vertical = 0
 scale = Vector2(5, 5)
 text = "ready"
 
-[node name="GachaContent" type="VBoxContainer" parent="MainMenu/GachaMenu/Panel"]
+[node name="GachaContent" type="VBoxContainer" parent="MainMenu/GachaMenu/Panel" unique_id=332078894]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -216,20 +200,20 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="Heading" type="Label" parent="MainMenu/GachaMenu/Panel/GachaContent"]
+[node name="Heading" type="Label" parent="MainMenu/GachaMenu/Panel/GachaContent" unique_id=1563326457]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Ball typing"
 horizontal_alignment = 1
 
-[node name="RollLabel" type="Label" parent="MainMenu/GachaMenu/Panel/GachaContent"]
+[node name="RollLabel" type="Label" parent="MainMenu/GachaMenu/Panel/GachaContent" unique_id=1836809283]
 custom_minimum_size = Vector2(460, 120)
 layout_mode = 2
 text = "Your ball type will appear here."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="RerollButton" type="Button" parent="MainMenu/GachaMenu/Panel/GachaContent"]
+[node name="RerollButton" type="Button" parent="MainMenu/GachaMenu/Panel/GachaContent" unique_id=1988419645]
 layout_mode = 2
 disabled = true
 text = "Reroll (0 left)"
