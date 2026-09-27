@@ -14,7 +14,7 @@ extends Control
 @onready var player_hp_label: Label = combat_ui.get_node("PlayerHPLabel")
 @onready var score_label: Label = combat_ui.get_node("ScorePanel/ScoreLabel")
 @onready var battle_status: Label = combat_ui.get_node("DialogueBox/BattleStatus")
-@onready var retry_button: Button = combat_ui.get_node("RetryButton")
+@onready var retry_button: Button = $MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton
 @onready var roll_label: Label = $MainMenu/GachaMenu/Panel/GachaContent/RollLabel
 @onready var reroll_button: Button = $MainMenu/GachaMenu/Panel/GachaContent/RerollButton
 

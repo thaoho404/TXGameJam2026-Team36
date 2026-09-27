@@ -7,9 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://do0fr3mueit2c" path="res://art-assets/background/Credits Scene (Background).png" id="4_te6ad"]
 [ext_resource type="Texture2D" uid="uid://g7jsx1fkc1rt" path="res://art-assets/background/Health bar.PNG" id="4_umypx"]
 [ext_resource type="Texture2D" uid="uid://cwlo2yqj4eewj" path="res://art-assets/sprites/The Wrangler default sprite.PNG" id="4_upid4"]
+[ext_resource type="FontFile" uid="uid://c4iiip647874o" path="res://fonts/PlayfairDisplaySC-Black.ttf" id="5_3nd05"]
 [ext_resource type="Texture2D" uid="uid://dv8jd8he0iykx" path="res://art-assets/background/title_screen_with_borders.png" id="5_fss6w"]
 [ext_resource type="PackedScene" uid="uid://bibie5uxpm0rm" path="res://scenes/pinball/PinballTable.tscn" id="5_table"]
 [ext_resource type="Texture2D" uid="uid://cbofh7xxihi1p" path="res://art-assets/background/BattleBorder_with_transparency.png" id="5_umypx"]
+[ext_resource type="FontFile" uid="uid://bpjd5j04a3ntk" path="res://fonts/PlayfairDisplaySC-Regular.ttf" id="6_acbhb"]
 [ext_resource type="Texture2D" uid="uid://dw8vqfb070im1" path="res://art-assets/sprites/pete default sprite.png" id="6_umypx"]
 [ext_resource type="Texture2D" uid="uid://bjpwps0g6prn" path="res://art-assets/sprites/Play Button.png" id="6_yvcut"]
 [ext_resource type="Texture2D" uid="uid://dv7kvbmaults7" path="res://art-assets/sprites/Exit Button.png" id="7_thnqr"]
@@ -105,6 +107,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="UpgradeMenu" type="Control" parent="MainMenu" unique_id=1047664814]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -160,31 +163,6 @@ grow_vertical = 2
 scale = Vector2(0.2, 0.2)
 texture = SubResource("AtlasTexture_atbjf")
 
-[node name="BackButton" type="TextureButton" parent="MainMenu/GachaMenu/Panel" unique_id=1856255627]
-layout_mode = 0
-offset_left = 164.0
-offset_top = 97.0
-offset_right = 1343.0
-offset_bottom = 392.0
-scale = Vector2(0.15, 0.15)
-texture_normal = SubResource("AtlasTexture_ft73y")
-
-[node name="ReadyButton" type="Button" parent="MainMenu/GachaMenu/Panel" unique_id=212980133]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -260.99994
-offset_top = -151.00003
-offset_right = -208.99994
-offset_bottom = -120.0
-grow_horizontal = 0
-grow_vertical = 0
-scale = Vector2(5, 5)
-text = "ready"
-
 [node name="GachaContent" type="VBoxContainer" parent="MainMenu/GachaMenu/Panel" unique_id=332078894]
 layout_mode = 1
 anchors_preset = 8
@@ -202,21 +180,55 @@ theme_override_constants/separation = 12
 
 [node name="Heading" type="Label" parent="MainMenu/GachaMenu/Panel/GachaContent" unique_id=1563326457]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 40
 text = "Ball typing"
 horizontal_alignment = 1
 
 [node name="RollLabel" type="Label" parent="MainMenu/GachaMenu/Panel/GachaContent" unique_id=1836809283]
 custom_minimum_size = Vector2(460, 120)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 30
 text = "Your ball type will appear here."
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="RerollButton" type="Button" parent="MainMenu/GachaMenu/Panel/GachaContent" unique_id=1988419645]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("6_acbhb")
 disabled = true
 text = "Reroll (0 left)"
+
+[node name="BackButton" type="TextureButton" parent="MainMenu/GachaMenu/Panel" unique_id=1856255627]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 97.0
+offset_right = 1343.0
+offset_bottom = 392.0
+scale = Vector2(0.15, 0.15)
+texture_normal = SubResource("AtlasTexture_ft73y")
+
+[node name="ReadyButton" type="Button" parent="MainMenu/GachaMenu/Panel" unique_id=212980133]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -380.0
+offset_top = -234.0
+offset_right = -207.0
+offset_bottom = -158.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 50
+text = "ready"
+flat = true
 
 [node name="CreditMenu" type="Control" parent="MainMenu" unique_id=1891105193]
 visible = false
@@ -261,7 +273,6 @@ scale = Vector2(0.15, 0.15)
 texture_normal = SubResource("AtlasTexture_ft73y")
 
 [node name="GamePlay" type="Control" parent="MainMenu" unique_id=520767378]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -442,18 +453,17 @@ nine_patch_stretch = true
 texture_progress = SubResource("AtlasTexture_ttd1q")
 
 [node name="RetryButton" type="Button" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=40506751]
-visible = false
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 158.0
-offset_top = -38.0
-offset_right = 274.0
-offset_bottom = -8.0
-grow_vertical = 0
+layout_mode = 0
+offset_left = 12.999992
+offset_top = 476.0
+offset_right = 603.0
+offset_bottom = 619.0
+rotation = -0.7749262
+size_flags_vertical = 4
 focus_mode = 0
-text = "Try Again"
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 100
+text = "Try Again?"
 
 [node name="PinballBoard" type="SubViewportContainer" parent="MainMenu/GamePlay/HBoxContainer" unique_id=2098449194]
 layout_mode = 2
@@ -462,8 +472,8 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard" unique_id=228156627]
 handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 0
+size = Vector2i(574, 648)
+render_target_update_mode = 4
 
 [node name="PinballTable" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
 position = Vector2(9, -14)
@@ -532,9 +542,9 @@ texture_normal = SubResource("AtlasTexture_a3qfc")
 stretch_mode = 5
 
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/GachaMenu/Panel/GachaContent/RerollButton" to="." method="_on_reroll_pressed"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/ReadyButton" to="." method="_on_ready_button_pressed"]
-[connection signal="pressed" from="MainMenu/GachaMenu/Panel/GachaContent/RerollButton" to="." method="_on_reroll_pressed"]
 [connection signal="pressed" from="MainMenu/CreditMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton" to="." method="_on_retry_button_pressed"]
 [connection signal="pressed" from="MainMenu/Panel/PlayButton" to="." method="_on_play_button_pressed"]
