@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var left_flipper = $Flippers/LeftFlipper
 @onready var right_flipper = $Flippers/RightFlipper
-@onready var plunger: AnimatableBody2D = $Plunger
+@onready var plunger: StaticBody2D = $Plunger
 @onready var ball: RigidBody2D = $BevoBall
 
 var plunger_power: float = 0.0
