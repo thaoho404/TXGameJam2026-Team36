@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://cqvm3exejtqcs" path="res://scenes/pinball/LaunchGate.tscn" id="4_17vu6"]
 [ext_resource type="PackedScene" uid="uid://bdq2pq1ho1asp" path="res://scenes/pinball/DropTarget.tscn" id="4_dmmqx"]
 [ext_resource type="Script" uid="uid://cw2knlq4ylfsu" path="res://scripts/physics/Plunger.gd" id="4_mlu7g"]
-[ext_resource type="PackedScene" path="res://scenes/pinball/RampTrigger.tscn" id="5_rinyx"]
 [ext_resource type="PackedScene" path="res://scenes/pinball/WingRampGuardrails.tscn" id="7_mlu7g"]
-[ext_resource type="PackedScene" path="res://scenes/pinball/IceTunnel.tscn" id="8_dt2ld"]
+[ext_resource type="PackedScene" uid="uid://dqok7377bm062" path="res://scenes/pinball/IceTunnel.tscn" id="8_dt2ld"]
+[ext_resource type="Script" uid="uid://bf8pw6s0m6kv7" path="res://scripts/physics/RampEntrance.gd" id="9_dt2ld"]
+[ext_resource type="Script" uid="uid://dnhibhg0p7s71" path="res://scripts/physics/RampExit.gd" id="9_mlu7g"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
 bounce = 1.6
@@ -44,6 +45,18 @@ size = Vector2(800, 50)
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mlu7g"]
 friction = 0.4
 bounce = 2.15
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nrfn0"]
+size = Vector2(30, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_entrance_gate"]
+size = Vector2(100, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3itm"]
+size = Vector2(70, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit_backstop"]
+size = Vector2(110, 8)
 
 [node name="PinballTable" type="Node2D" unique_id=2069753559]
 script = ExtResource("1_script")
@@ -209,19 +222,8 @@ shape = SubResource("RectangleShape2D_drain")
 position = Vector2(539, 187)
 physics_material_override = SubResource("PhysicsMaterial_mlu7g")
 
-[node name="RampTrigger" parent="." unique_id=1936923739 instance=ExtResource("5_rinyx")]
-position = Vector2(46, 321)
-
-[node name="RampTrigger2" parent="." unique_id=341281174 instance=ExtResource("5_rinyx")]
-position = Vector2(139, 23)
-trigger_type = "Exit"
-
 [node name="WingRampGuardrails" parent="." unique_id=1128351773 instance=ExtResource("7_mlu7g")]
 position = Vector2(420, 181)
-
-[node name="LeftTrackGuardrails" parent="." unique_id=1132358922 instance=ExtResource("8_dt2ld")]
-position = Vector2(146, 137)
-collision_layer = 3
 
 [node name="DropTarget" parent="." unique_id=1398348387 instance=ExtResource("4_dmmqx")]
 position = Vector2(208, 316)
@@ -232,6 +234,72 @@ position = Vector2(251, 316)
 [node name="DropTarget3" parent="." unique_id=4295652 instance=ExtResource("4_dmmqx")]
 position = Vector2(295, 316)
 
+[node name="RampSystem" type="Node2D" parent="." unique_id=1332086593]
+
+[node name="LeftTrackGuardrails" parent="RampSystem" unique_id=1132358922 instance=ExtResource("8_dt2ld")]
+position = Vector2(146, 137)
+collision_layer = 2
+
+[node name="LowerRampForce" type="Area2D" parent="RampSystem" unique_id=863551578]
+collision_layer = 2
+gravity_space_override = 1
+gravity_direction = Vector2(0, -1)
+gravity = 1600.0
+
+[node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/LowerRampForce" unique_id=647378672]
+polygon = PackedVector2Array(7, 340, 85, 340, 85, 150, 97, 140, 7, 90)
+
+[node name="UpperRampForce" type="Area2D" parent="RampSystem"]
+collision_layer = 2
+gravity_space_override = 1
+gravity_direction = Vector2(0.5547, -0.83205)
+gravity = 1600.0
+
+[node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/UpperRampForce"]
+polygon = PackedVector2Array(0, 95, 140, -55, 180, 15, 97, 145)
+
+[node name="RampEntrance" type="Node2D" parent="RampSystem" unique_id=484157773]
+script = ExtResource("9_dt2ld")
+
+[node name="FrontSensor" type="Area2D" parent="RampSystem/RampEntrance"]
+position = Vector2(45, 385)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/FrontSensor" unique_id=175544719]
+shape = SubResource("RectangleShape2D_nrfn0")
+
+[node name="CommitSensor" type="Area2D" parent="RampSystem/RampEntrance"]
+position = Vector2(45, 315)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/CommitSensor"]
+shape = SubResource("RectangleShape2D_nrfn0")
+
+[node name="EntranceGate" type="StaticBody2D" parent="RampSystem"]
+position = Vector2(45, 344)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/EntranceGate"]
+shape = SubResource("RectangleShape2D_entrance_gate")
+one_way_collision = true
+
+[node name="ExitBackstop" type="StaticBody2D" parent="RampSystem"]
+position = Vector2(140, 12)
+rotation = 0.588003
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/ExitBackstop"]
+shape = SubResource("RectangleShape2D_exit_backstop")
+one_way_collision = true
+
+[node name="RampExit" type="Area2D" parent="RampSystem" unique_id=216285063]
+position = Vector2(1, -15)
+collision_layer = 2
+script = ExtResource("9_mlu7g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampExit" unique_id=810355615]
+position = Vector2(139, 27.5)
+shape = SubResource("RectangleShape2D_t3itm")
+
 [connection signal="body_entered" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_entered"]
 [connection signal="body_exited" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_exited"]
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
+[connection signal="body_entered" from="RampSystem/RampEntrance/FrontSensor" to="RampSystem/RampEntrance" method="_on_front_sensor_body_entered"]
+[connection signal="body_entered" from="RampSystem/RampEntrance/CommitSensor" to="RampSystem/RampEntrance" method="_on_commit_sensor_body_entered"]
+[connection signal="body_entered" from="RampSystem/RampExit" to="RampSystem/RampExit" method="_on_body_entered"]

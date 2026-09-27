@@ -11,7 +11,7 @@ radius = 25.0
 
 [node name="BevoBall" type="RigidBody2D" unique_id=1594381274]
 physics_material_override = SubResource("PhysicsMaterial_ball")
-continuous_cd = 1
+continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 3
 script = ExtResource("1_script")
