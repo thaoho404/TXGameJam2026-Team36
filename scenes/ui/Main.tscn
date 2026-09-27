@@ -41,6 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GamePlay" type="Control" parent="MainMenu" unique_id=520767378]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,7 +50,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainMenu/GamePlay" unique_id=331379869]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
