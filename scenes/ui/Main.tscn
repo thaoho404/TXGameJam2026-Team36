@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://b8y4g5v1x2q3"]
 
-[ext_resource type="Texture2D" uid="uid://bll6t05b3jivm" path="res://art-assets/sprites/Player_Bevo.png" id="1_bevo"]
 [ext_resource type="Script" uid="uid://csrtnhvh88wnw" path="res://scenes/ui/main.gd" id="1_yvcut"]
-[ext_resource type="Texture2D" uid="uid://xcgtk2wu53cq" path="res://art-assets/sprites/Enemy_Sprite.png" id="2_enemy"]
 [ext_resource type="Texture2D" uid="uid://d1cigp5uvpds6" path="res://art-assets/sprites/Go Back Button.png" id="2_thnqr"]
 [ext_resource type="Texture2D" uid="uid://c14vfgre5j6eb" path="res://art-assets/ui/UI_Panel.png" id="3_ui"]
+[ext_resource type="Texture2D" uid="uid://bn68mmpqjorrj" path="res://art-assets/background/BattleBackground .PNG" id="3_upid4"]
+[ext_resource type="Texture2D" uid="uid://g7jsx1fkc1rt" path="res://art-assets/background/Health bar.PNG" id="4_umypx"]
+[ext_resource type="Texture2D" uid="uid://cwlo2yqj4eewj" path="res://art-assets/sprites/The Wrangler default sprite.PNG" id="4_upid4"]
 [ext_resource type="Texture2D" uid="uid://dv8jd8he0iykx" path="res://art-assets/background/title_screen_with_borders.png" id="5_fss6w"]
 [ext_resource type="PackedScene" uid="uid://bibie5uxpm0rm" path="res://scenes/pinball/PinballTable.tscn" id="5_table"]
+[ext_resource type="Texture2D" uid="uid://dw8vqfb070im1" path="res://art-assets/sprites/pete default sprite.png" id="6_umypx"]
 [ext_resource type="Texture2D" uid="uid://bjpwps0g6prn" path="res://art-assets/sprites/Play Button.png" id="6_yvcut"]
 [ext_resource type="Texture2D" uid="uid://dv7kvbmaults7" path="res://art-assets/sprites/Exit Button.png" id="7_thnqr"]
 [ext_resource type="Texture2D" uid="uid://c42hrr28l3j6" path="res://art-assets/sprites/Credits Button.png" id="8_gl1th"]
@@ -16,8 +18,19 @@
 atlas = ExtResource("2_thnqr")
 region = Rect2(224.79283, 425.08276, 1179.6998, 295.81537)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
-bg_color = Color(0.8, 0.15, 0.15, 1)
+[sub_resource type="AtlasTexture" id="AtlasTexture_2guxs"]
+atlas = ExtResource("3_upid4")
+region = Rect2(186.984, 119.9506, 636.8626, 750.1518)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8jtn"]
+atlas = ExtResource("4_upid4")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_te6ad"]
+atlas = ExtResource("6_umypx")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ner2"]
+atlas = ExtResource("4_umypx")
+region = Rect2(167, 116, 353, 122)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_a3qfc"]
 texture = ExtResource("5_fss6w")
@@ -56,6 +69,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="UpgradeMenu" type="Control" parent="MainMenu" unique_id=1047664814]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -191,7 +205,6 @@ scale = Vector2(5, 5)
 text = "CREDIT SCREEN TEMP"
 
 [node name="GamePlay" type="Control" parent="MainMenu" unique_id=520767378]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -212,18 +225,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.2, 0.15, 0.15, 1)
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1426188693]
+[node name="CombatBackground" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=757237311]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = 30.0
-offset_top = 20.0
-offset_right = -30.0
-offset_bottom = 50.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme_override_styles/fill = SubResource("StyleBoxFlat_health")
-value = 100.0
-show_percentage = false
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_2guxs")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayerBevo" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=287280531]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -358.0
+offset_right = 102.0
+offset_bottom = -238.0
+grow_vertical = 0
+scale = Vector2(3, 3)
+texture = SubResource("AtlasTexture_i8jtn")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
 
 [node name="DialogueBox" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1677895318]
 layout_mode = 0
@@ -237,18 +265,13 @@ stretch_mode = 5
 
 [node name="EnemySprite" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=93875696]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_enemy")
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_bottom = 300.0
+grow_horizontal = 0
+texture = SubResource("AtlasTexture_te6ad")
 expand_mode = 1
 stretch_mode = 5
 
@@ -269,19 +292,17 @@ texture = ExtResource("3_ui")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayerBevo" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=287280531]
+[node name="EnemyHealthBar" type="TextureProgressBar" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=817736329]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 30.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = -30.0
-grow_vertical = 0
-texture = ExtResource("1_bevo")
-expand_mode = 1
-stretch_mode = 5
+offset_left = 27.0
+offset_top = 9.0
+offset_right = 857.303
+offset_bottom = 131.0
+rotation = 0.02443461
+scale = Vector2(0.33, 0.33)
+value = 100.0
+nine_patch_stretch = true
+texture_progress = SubResource("AtlasTexture_0ner2")
 
 [node name="PinballBoard" type="SubViewportContainer" parent="MainMenu/GamePlay/HBoxContainer" unique_id=2098449194]
 layout_mode = 2
@@ -290,8 +311,8 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard" unique_id=228156627]
 handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 0
+size = Vector2i(574, 648)
+render_target_update_mode = 4
 
 [node name="PinballTable" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
 
