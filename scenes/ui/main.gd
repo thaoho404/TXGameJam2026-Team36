@@ -1,6 +1,9 @@
 extends Control
 
+const BOSS_2_TEXTURE: Texture2D = preload("res://art-assets/sprites/reveille_normal_sprite.png")
+
 @onready var title_screen: Control = $MainMenu/Panel
+@onready var start_screen: Control = $MainMenu/StartChoiceMenu
 @onready var upgrade_screen: Control = $MainMenu/UpgradeMenu
 @onready var gacha_screen: Control = $MainMenu/GachaMenu
 @onready var credit_screen: Control = $MainMenu/CreditMenu
@@ -8,6 +11,8 @@ extends Control
 @onready var turn_manager: TurnManager = $TurnManager
 @onready var pinball_table: PinballController = $MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport/PinballTable
 @onready var combat_ui: Control = $MainMenu/GamePlay/HBoxContainer/CombatUI
+@onready var enemy_sprite: TextureRect = combat_ui.get_node("EnemySprite")
+@onready var boss_1_texture: Texture2D = enemy_sprite.texture
 @onready var enemy_health_bar: TextureProgressBar = combat_ui.get_node("EnemyHealthBar")
 @onready var player_health_bar: TextureProgressBar = combat_ui.get_node("PlayerHealthBar")
 @onready var enemy_hp_label: Label = combat_ui.get_node("EnemyHPLabel")
@@ -17,10 +22,9 @@ extends Control
 @onready var retry_button: Button = $MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton
 @onready var roll_label: Label = $MainMenu/GachaMenu/Panel/GachaContent/RollLabel
 @onready var reroll_button: Button = $MainMenu/GachaMenu/Panel/GachaContent/RerollButton
+@onready var continue_button: Button = $MainMenu/StartChoiceMenu/StartChoiceContent/ContinueButton
 
 var profile := RunProfile.new()
-var start_screen: Control
-var continue_button: Button
 var currency_label: Label
 var upgrade_buttons: Dictionary = {}
 var run_label: Label
@@ -63,29 +67,6 @@ func _menu(parent: Control, heading: String) -> VBoxContainer:
 
 
 func _build_menus() -> void:
-	start_screen = Control.new()
-	start_screen.name = "StartChoice"
-	start_screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	$MainMenu.add_child(start_screen)
-	var backdrop := ColorRect.new()
-	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	backdrop.color = Color(0.07, 0.06, 0.12, 0.95)
-	start_screen.add_child(backdrop)
-	var start_box := _menu(start_screen, "Choose a game")
-	var new_button := Button.new()
-	new_button.text = "New Game — reset upgrades and currency"
-	new_button.pressed.connect(_on_new_game_pressed)
-	start_box.add_child(new_button)
-	continue_button = Button.new()
-	continue_button.text = "Continue — use saved upgrades"
-	continue_button.pressed.connect(_on_continue_pressed)
-	start_box.add_child(continue_button)
-	var back := Button.new()
-	back.text = "Back"
-	back.pressed.connect(_on_back_button_pressed)
-	start_box.add_child(back)
-	start_screen.hide()
-
 	#$MainMenu/UpgradeMenu/Panel/TempText.hide()
 	var upgrade_box := _menu($MainMenu/UpgradeMenu/Panel, "Permanent upgrades")
 	currency_label = Label.new()
@@ -182,6 +163,7 @@ func _on_upgrade_pressed(key: String) -> void:
 func _on_ready_button_pressed() -> void:
 	if not profile.run_active or profile.current_ball == null:
 		return
+	enemy_sprite.texture = boss_1_texture
 	turn_manager.player_max_hp = 100 + 20 * int(profile.upgrades["hp"])
 	turn_manager.enemy_max_hp = RunProfile.BOSSES[0]
 	turn_manager.balls_left = profile.balls_left
@@ -236,6 +218,8 @@ func _advance_boss_after_pause(revision: int) -> void:
 	if revision != _run_revision or not profile.run_active or not game_screen.visible:
 		return
 	profile.boss_index += 1
+	if profile.boss_index == 1:
+		enemy_sprite.texture = BOSS_2_TEXTURE
 	turn_manager.start_next_opponent(RunProfile.BOSSES[profile.boss_index])
 	_update_battle_ui()
 
