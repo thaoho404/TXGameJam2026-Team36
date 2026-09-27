@@ -30,6 +30,11 @@ var upgrade_buttons: Dictionary = {}
 var run_label: Label
 var _run_revision: int = 0
 
+## Seconds for the credits image to scroll from the bottom of the TV to off the top.
+@export var credits_scroll_seconds: float = 25.0
+@onready var credits_roll: TextureRect = $MainMenu/CreditMenu/Panel/Screen/CreditsRoll
+var _credits_tween: Tween
+
 
 func _ready() -> void:
 	profile.load_profile()
@@ -93,6 +98,9 @@ func show_screen(screen: Control) -> void:
 	if screen != game_screen:
 		turn_manager.stop_battle()
 		pinball_table.stop_board()
+	if screen != credit_screen and _credits_tween:
+		_credits_tween.kill()
+		_credits_tween = null
 	for page in [title_screen, upgrade_screen, gacha_screen, credit_screen, game_screen, start_screen]:
 		page.hide()
 	screen.show()
@@ -178,6 +186,17 @@ func _on_ready_button_pressed() -> void:
 
 func _on_credits_button_pressed() -> void:
 	show_screen(credit_screen)
+	_play_credits_roll()
+
+
+func _play_credits_roll() -> void:
+	# Rolls the credits up the TV screen and loops until the player leaves.
+	if _credits_tween:
+		_credits_tween.kill()
+	var screen_height := (credits_roll.get_parent() as Control).size.y
+	credits_roll.position.y = screen_height
+	_credits_tween = create_tween().set_loops()
+	_credits_tween.tween_property(credits_roll, "position:y", -credits_roll.size.y, credits_scroll_seconds).from(screen_height)
 
 
 func _on_exit_button_pressed() -> void:

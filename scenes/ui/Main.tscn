@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://c180kbvn4jgb8" path="res://art-assets/sprites/Upgrade Button.png" id="9_upid4"]
 [ext_resource type="Texture2D" uid="uid://cr06wbwc26a" path="res://art-assets/background/PinRoulette Title Screen (COMPLETE with Picture).png" id="12_i8jtn"]
 [ext_resource type="Texture2D" uid="uid://cv2x7nbrdlmp2" path="res://art-assets/background/PinRoulette Title Screen New Game or New Game Plus.png" id="13_startbg"]
+[ext_resource type="Texture2D" uid="uid://2i45kqtlisdw" path="res://art-assets/sprites/Credits.png" id="14_credits"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft73y"]
 atlas = ExtResource("2_thnqr")
@@ -265,6 +266,33 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.2, 0.2)
 texture = SubResource("AtlasTexture_atbjf")
+
+[node name="Screen" type="Control" parent="MainMenu/CreditMenu/Panel" unique_id=1392847561]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -426.0
+offset_top = -229.0
+offset_right = 384.0
+offset_bottom = 154.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CreditsRoll" type="TextureRect" parent="MainMenu/CreditMenu/Panel/Screen" unique_id=1740263118]
+layout_mode = 0
+offset_left = 255.0
+offset_top = 383.0
+offset_right = 555.0
+offset_bottom = 1283.0
+mouse_filter = 2
+texture = ExtResource("14_credits")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="BackButton" type="TextureButton" parent="MainMenu/CreditMenu/Panel" unique_id=2065268987]
 layout_mode = 0
