@@ -30,11 +30,6 @@ var _request_revision: int = 0
 var _initial_sprite_scale: Vector2
 var _initial_collision_mask: int
 var _last_bumper_score_ms: Dictionary[int, int] = {}
-
-const LEFT_REST_ANGLE := deg_to_rad(18.0)
-const LEFT_ACTIVE_ANGLE := deg_to_rad(-28.0)
-const RIGHT_REST_ANGLE := deg_to_rad(-18.0)
-const RIGHT_ACTIVE_ANGLE := deg_to_rad(28.0)
 var _initial_ball_texture: Texture2D
 var _bumper_types: Dictionary = {}
 var _target_hits: int = 0
@@ -44,6 +39,11 @@ var _launch_lane_anchor: Vector2 = Vector2.ZERO
 var _launch_lane_time: float = 0.0
 var _still_time: float = 0.0
 var _rescue_pending: bool = false
+
+const LEFT_REST_ANGLE := deg_to_rad(18.0)
+const LEFT_ACTIVE_ANGLE := deg_to_rad(-28.0)
+const RIGHT_REST_ANGLE := deg_to_rad(-18.0)
+const RIGHT_ACTIVE_ANGLE := deg_to_rad(28.0)
 const BUMPER_ELEMENTS := [BevoData.ElementType.NORMAL, BevoData.ElementType.WATER, BevoData.ElementType.GRASS, BevoData.ElementType.FIRE, BevoData.ElementType.EARTH, BevoData.ElementType.ICE, BevoData.ElementType.WIND, BevoData.ElementType.ELECTRIC, BevoData.ElementType.STEEL, BevoData.ElementType.FAIRY, BevoData.ElementType.DARK]
 const TARGET_ELEMENTS := [BevoData.ElementType.PSYCHIC, BevoData.ElementType.GHOST, BevoData.ElementType.NORMAL, BevoData.ElementType.WATER, BevoData.ElementType.GRASS, BevoData.ElementType.FIRE, BevoData.ElementType.EARTH, BevoData.ElementType.ICE, BevoData.ElementType.WIND, BevoData.ElementType.ELECTRIC, BevoData.ElementType.STEEL, BevoData.ElementType.FAIRY, BevoData.ElementType.DARK]
 

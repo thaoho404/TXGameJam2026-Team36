@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://spnbchstqhw"
-path="res://.godot/imported/Ready Button.png-f1eb9cace5e3dedf099c2450ce5a4268.ctex"
+uid="uid://bp11fi212ldbc"
+path="res://.godot/imported/Upgrade Background.png-a227554947c4c155b5e3e6cb3b83414c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art-assets/sprites/Ready Button.png"
-dest_files=["res://.godot/imported/Ready Button.png-f1eb9cace5e3dedf099c2450ce5a4268.ctex"]
+source_file="res://art-assets/background/Upgrade Background.png"
+dest_files=["res://.godot/imported/Upgrade Background.png-a227554947c4c155b5e3e6cb3b83414c.ctex"]
 
 [params]
 
