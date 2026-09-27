@@ -210,6 +210,17 @@ func _test_main_scene() -> void:
 	main._on_continue_pressed()
 	_check(main.gacha_screen.visible and main.profile.current_ball != null,
 		"Continue rolls a ball before the run")
+	var scene_reroll: Button = main.get_node("MainMenu/GachaMenu/Panel/GachaContent/RerollButton")
+	_check(scene_reroll.owner == main and main.roll_label.owner == main,
+		"Gacha controls are editable scene nodes")
+	main.profile.rerolls_left = 1
+	main._refresh_gacha()
+	scene_reroll.pressed.emit()
+	_check(main.profile.rerolls_left == 0 and scene_reroll.disabled
+		and main.profile.current_ball.display_name in main.roll_label.text,
+		"Scene reroll button updates the selected ball and remaining rerolls")
+	main.profile.current_ball = GachaRoller.new().get_type("normal")
+	main._refresh_gacha()
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await process_frame
 	_check(main.game_screen.visible and not main.gacha_screen.visible

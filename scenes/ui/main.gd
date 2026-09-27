@@ -14,13 +14,13 @@ extends Control
 @onready var player_hp_label: Label = combat_ui.get_node("PlayerHPLabel")
 @onready var score_label: Label = combat_ui.get_node("ScorePanel/ScoreLabel")
 @onready var battle_status: Label = combat_ui.get_node("DialogueBox/BattleStatus")
-@onready var retry_button: Button = combat_ui.get_node("RetryButton")
+@onready var retry_button: Button = $MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton
+@onready var roll_label: Label = $MainMenu/GachaMenu/Panel/GachaContent/RollLabel
+@onready var reroll_button: Button = $MainMenu/GachaMenu/Panel/GachaContent/RerollButton
 
 var profile := RunProfile.new()
 var start_screen: Control
 var continue_button: Button
-var roll_label: Label
-var reroll_button: Button
 var currency_label: Label
 var upgrade_buttons: Dictionary = {}
 var run_label: Label
@@ -86,18 +86,7 @@ func _build_menus() -> void:
 	start_box.add_child(back)
 	start_screen.hide()
 
-	$MainMenu/GachaMenu/Panel/TempText.hide()
-	var gacha_box := _menu($MainMenu/GachaMenu/Panel, "Ball typing")
-	roll_label = Label.new()
-	roll_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	roll_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	roll_label.custom_minimum_size = Vector2(460, 120)
-	gacha_box.add_child(roll_label)
-	reroll_button = Button.new()
-	reroll_button.pressed.connect(_on_reroll_pressed)
-	gacha_box.add_child(reroll_button)
-
-	$MainMenu/UpgradeMenu/Panel/TempText.hide()
+	#$MainMenu/UpgradeMenu/Panel/TempText.hide()
 	var upgrade_box := _menu($MainMenu/UpgradeMenu/Panel, "Permanent upgrades")
 	currency_label = Label.new()
 	currency_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -159,7 +148,7 @@ func _refresh_gacha() -> void:
 		roll_label.text = "No ball types are available."
 		$MainMenu/GachaMenu/Panel/ReadyButton.disabled = true
 		return
-	roll_label.text = "%s  •  %s\n%s\n\nOne element for the full run." % [chosen.display_name, BallType.Rarity.keys()[chosen.rarity].capitalize(), chosen.description]
+	roll_label.text = "%s  •  %s\n%s" % [chosen.display_name, BallType.Rarity.keys()[chosen.rarity].capitalize(), chosen.description]
 	reroll_button.text = "Reroll (%d left)" % profile.rerolls_left
 	reroll_button.disabled = profile.rerolls_left <= 0
 	$MainMenu/GachaMenu/Panel/ReadyButton.disabled = false
