@@ -17,24 +17,36 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MainMenu" type="Control" parent="." unique_id=370771292]
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="UpgradeMenu" type="Control" parent="MainMenu" unique_id=1047664814]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="CreditMenu" type="Control" parent="MainMenu" unique_id=1891105193]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="GamePlay" type="Control" parent="MainMenu" unique_id=520767378]
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainMenu/GamePlay" unique_id=331379869]
 visible = false
@@ -128,7 +140,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard" unique_id=228156627]
 handle_input_locally = false
-size = Vector2i(2, 2)
+size = Vector2i(574, 648)
 render_target_update_mode = 0
 
 [node name="PinballTable" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
