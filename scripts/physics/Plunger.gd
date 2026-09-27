@@ -15,6 +15,7 @@ var _served_ball: RigidBody2D = null
 var _armed_ball: RigidBody2D = null
 var _wait_for_input_release: bool = false
 var _launch_physics_frame: int = -1
+var launch_multiplier: float = 1.0
 
 @onready var visual_stick: ColorRect = $VisualBlock
 @onready var start_y: float = visual_stick.position.y
@@ -88,7 +89,7 @@ func request_launch(power: float) -> bool:
 	_reset_charge()
 	launched_ball.freeze = false
 	launched_ball.sleeping = false
-	launched_ball.apply_central_impulse(Vector2.UP * launch_power)
+	launched_ball.apply_central_impulse(Vector2.UP * launch_power * launch_multiplier)
 	ball_launched.emit()
 	return true
 

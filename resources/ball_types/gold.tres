@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BallType" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/resources/BallType.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "gold"
+display_name = "Gold"
+rarity = 4
+element = 11
+description = "Fivefold score and currency."
+score_currency_multiplier = 5.0

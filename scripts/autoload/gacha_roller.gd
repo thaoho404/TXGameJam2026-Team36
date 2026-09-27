@@ -1,54 +1,65 @@
-# res://scripts/autoload/gacha_roller.gd (autoload)
-extends Node
+class_name GachaRoller
+extends RefCounted
 
-const RARITY_WEIGHTS := {
-	BallType.Rarity.COMMON: 64.0,
-	BallType.Rarity.UNCOMMON: 20.0,
-	BallType.Rarity.RARE: 10.0,
-	BallType.Rarity.EPIC: 5.0,
-	BallType.Rarity.LEGENDARY: 1.0,
-}
+const TYPE_DIR := "res://resources/ball_types/"
+const RARITIES := [
+	BallType.Rarity.COMMON,
+	BallType.Rarity.UNCOMMON,
+	BallType.Rarity.RARE,
+	BallType.Rarity.EPIC,
+	BallType.Rarity.LEGENDARY,
+]
+const WEIGHTS := [64.0, 20.0, 10.0, 5.0, 1.0]
 
-var all_types: Array[BallType] = []
-var types_by_rarity: Dictionary = {}  # Rarity -> Array[BallType]
+var types_by_rarity: Dictionary = {}
+var rng := RandomNumberGenerator.new()
 
-func _ready() -> void:
-	_load_all_types()
 
-func _load_all_types() -> void:
-	var dir := DirAccess.open("res://resources/ball_types/")
-	dir.list_dir_begin()
-	var file_name := dir.get_next()
+func _init() -> void:
+	rng.randomize()
+	load_types()
+
+
+func load_types() -> bool:
+	types_by_rarity.clear()
+	var directory := DirAccess.open(TYPE_DIR)
+	if directory == null:
+		push_error("Ball type resources are missing: " + TYPE_DIR)
+		return false
+	directory.list_dir_begin()
+	var file_name := directory.get_next()
 	while file_name != "":
 		if file_name.ends_with(".tres"):
-			var res := load("res://resources/ball_types/" + file_name) as BallType
-			all_types.append(res)
-			if not types_by_rarity.has(res.rarity):
-				types_by_rarity[res.rarity] = []
-			types_by_rarity[res.rarity].append(res)
-		file_name = dir.get_next()
-	dir.list_dir_begin()
-	
+			var ball_type := load(TYPE_DIR + file_name) as BallType
+			if ball_type != null:
+				if not types_by_rarity.has(ball_type.rarity):
+					types_by_rarity[ball_type.rarity] = []
+				types_by_rarity[ball_type.rarity].append(ball_type)
+		file_name = directory.get_next()
+	directory.list_dir_end()
+	for rarity in RARITIES:
+		if not types_by_rarity.has(rarity):
+			push_error("No ball type resource for rarity %d" % rarity)
+			return false
+	return true
+
+
 func roll_ball_type() -> BallType:
-	# Step A: pick a rarity tier by weight
-	var total_weight := 0.0
-	for w in RARITY_WEIGHTS.values():
-		total_weight += w
-	
-	var roll := randf() * total_weight
-	var chosen_rarity: BallType.Rarity = BallType.Rarity.COMMON
+	var roll := rng.randf_range(0.0, 100.0)
 	var cumulative := 0.0
-	for rarity in RARITY_WEIGHTS.keys():
-		cumulative += RARITY_WEIGHTS[rarity]
-		if roll <= cumulative:
-			chosen_rarity = rarity
-			break
-	
-	# Step B: pick a random type within that tier
-	var candidates: Array = types_by_rarity.get(chosen_rarity, [])
-	if candidates.is_empty():
-		push_error("No BallType resources found for rarity: %s" % chosen_rarity)
-		return null
-	
-	return candidates[randi() % candidates.size()]
-	
+	for index in RARITIES.size():
+		cumulative += WEIGHTS[index]
+		if roll < cumulative:
+			var candidates: Array = types_by_rarity.get(RARITIES[index], [])
+			if candidates.is_empty():
+				return null
+			return candidates[rng.randi_range(0, candidates.size() - 1)] as BallType
+	return null
+
+
+func get_type(type_id: String) -> BallType:
+	for candidates in types_by_rarity.values():
+		for ball_type in candidates:
+			if ball_type.id == type_id:
+				return ball_type
+	return null

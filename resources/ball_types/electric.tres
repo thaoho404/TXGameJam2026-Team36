@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BallType" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/resources/BallType.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "electric"
+display_name = "Electric"
+rarity = 2
+element = 3
+description = "Launch 40% faster; reactions are 50% stronger."
+speed_multiplier = 1.4
+reaction_strength_mult = 1.5
