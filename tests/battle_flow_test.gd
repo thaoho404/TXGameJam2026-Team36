@@ -246,6 +246,8 @@ func _test_main_scene() -> void:
 		and manager.current_state == TurnManager.BattleState.PREP
 		and board.board_state == PinballController.BoardState.READY,
 		"Ready button starts combat and serves a ball")
+	_check(board.ball_sprite.texture == main.profile.current_ball.ball_texture,
+		"Starting combat applies the rolled ball sprite")
 	_check(main.enemy_health_bar.value == manager.enemy_max_hp
 		and main.player_health_bar.value == manager.player_max_hp
 		and "Score: 0" in main.score_label.text,
@@ -300,6 +302,8 @@ func _test_main_scene() -> void:
 	_check(main.profile.boss_index == 1 and manager.enemy_hp == 1000 and manager.player_hp == 85
 		and manager.balls_left == 1 and board.board_state == PinballController.BoardState.READY,
 		"Second boss starts at 1000 HP with remaining balls and player HP carried forward")
+	_check(board.ball_sprite.texture == main.profile.current_ball.ball_texture,
+		"Remaining balls keep their element sprite against the next boss")
 	_check(main.enemy_sprite.texture == main.BOSS_2_TEXTURE,
 		"Second boss shows the Reveille sprite")
 	board.plunger.request_launch(2000.0)
@@ -311,8 +315,12 @@ func _test_main_scene() -> void:
 	main.retry_button.pressed.emit()
 	_check(main.gacha_screen.visible and manager.current_state == TurnManager.BattleState.IDLE,
 		"Retry button returns to gacha and stops the completed battle")
+	main.profile.current_ball = GachaRoller.new().get_type("fire")
+	main._refresh_gacha()
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await process_frame
+	_check(board.ball_sprite.texture == main.profile.current_ball.ball_texture,
+		"A new run replaces the previous ball sprite with its new element")
 	_check(main.enemy_sprite.texture == main.boss_1_texture,
 		"Retry restores the first boss sprite")
 	board.plunger.request_launch(2000.0)

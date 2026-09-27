@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="BallType" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BallType" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/resources/BallType.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://art-assets/sprites/bevo-balls/Earth Bevos Pinball 2.0.png" id="2_texture"]
 
 [resource]
 script = ExtResource("1_script")
@@ -8,4 +9,5 @@ id = "earth"
 display_name = "Earth"
 rarity = 0
 element = 7
+ball_texture = ExtResource("2_texture")
 description = "Earth reactions use the chart."

@@ -36,5 +36,11 @@ func _run() -> void:
 			"Rarity %d has its intended ball types" % rarity)
 	_check(roller.get_type("gold") != null and roller.get_type("gold").score_currency_multiplier == 5.0,
 		"Gold resource gives fivefold score and currency")
+	for type_id in ["normal", "water", "grass", "fire", "earth", "ice", "wind", "electric", "steel", "fairy", "dark", "gold"]:
+		var ball_type := roller.get_type(type_id)
+		var file_name := "Earth Bevos Pinball 2.0.png" if type_id == "earth" else "%s Bevo Ball.png" % type_id.capitalize()
+		_check(ball_type != null and ball_type.ball_texture != null
+			and ball_type.ball_texture.resource_path == "res://art-assets/sprites/bevo-balls/" + file_name,
+			"%s ball uses its matching Bevo sprite" % type_id.capitalize())
 	print("Element data checks: %d failure(s)." % failures)
 	quit(1 if failures > 0 else 0)
