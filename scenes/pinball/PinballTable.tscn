@@ -3,9 +3,12 @@
 [ext_resource type="Script" uid="uid://bxcqwwgyw071x" path="res://scripts/physics/PinballController.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c735vwnxgmtc3" path="res://scenes/pinball/BevoBall.tscn" id="2_ball"]
 [ext_resource type="Texture2D" uid="uid://d0x2phql0onc1" path="res://art-assets/ui/Elemental_Bumper.png" id="3_bumper"]
-[ext_resource type="PackedScene" path="res://scenes/pinball/LaunchGate.tscn" id="4_17vu6"]
+[ext_resource type="PackedScene" uid="uid://cqvm3exejtqcs" path="res://scenes/pinball/LaunchGate.tscn" id="4_17vu6"]
+[ext_resource type="PackedScene" uid="uid://bdq2pq1ho1asp" path="res://scenes/pinball/DropTarget.tscn" id="4_dmmqx"]
+[ext_resource type="Script" uid="uid://cw2knlq4ylfsu" path="res://scripts/physics/Plunger.gd" id="4_mlu7g"]
 [ext_resource type="PackedScene" path="res://scenes/pinball/RampTrigger.tscn" id="5_rinyx"]
-[ext_resource type="PackedScene" uid="uid://cm38b6y62y5w1" path="res://scenes/pinball/WindRampGuardrails.tscn" id="6_evd0j"]
+[ext_resource type="PackedScene" path="res://scenes/pinball/WingRampGuardrails.tscn" id="7_mlu7g"]
+[ext_resource type="PackedScene" path="res://scenes/pinball/IceTunnel.tscn" id="8_dt2ld"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
 bounce = 1.6
@@ -16,8 +19,31 @@ radius = 12.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flipper"]
 size = Vector2(115, 24)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65ytc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mlu7g"]
+size = Vector2(115, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt2ld"]
+size = Vector2(115, 419)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_65ytc"]
+size = Vector2(76.5, 39)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dt2ld"]
+friction = 0.1
+bounce = 1.6
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6q13x"]
+friction = 0.1
+bounce = 1.6
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_drain"]
 size = Vector2(800, 50)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mlu7g"]
+friction = 0.4
+bounce = 2.15
 
 [node name="PinballTable" type="Node2D" unique_id=2069753559]
 script = ExtResource("1_script")
@@ -79,10 +105,11 @@ color = Color(0.2, 0.8, 0.2, 1)
 [node name="RightFlipper" type="AnimatableBody2D" parent="Flippers" unique_id=910145351]
 position = Vector2(382, 570)
 rotation = -0.45
+physics_material_override = SubResource("PhysicsMaterial_65ytc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Flippers/RightFlipper" unique_id=1471452771]
 position = Vector2(-57.00003, 6.1035156e-05)
-shape = SubResource("RectangleShape2D_flipper")
+shape = SubResource("RectangleShape2D_mlu7g")
 
 [node name="ColorRect" type="ColorRect" parent="Flippers/RightFlipper" unique_id=2140992801]
 offset_left = -115.0
@@ -90,19 +117,27 @@ offset_top = -12.0
 offset_bottom = 12.0
 color = Color(0.2, 0.8, 0.2, 1)
 
-[node name="Plunger" type="AnimatableBody2D" parent="." unique_id=303713677]
+[node name="Plunger" type="StaticBody2D" parent="." unique_id=773173788]
 position = Vector2(535, 600)
+script = ExtResource("4_mlu7g")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Plunger" unique_id=2053001665]
-position = Vector2(0, 15)
-shape = SubResource("RectangleShape2D_flipper")
+[node name="SolidFloor" type="CollisionShape2D" parent="Plunger" unique_id=2053001665]
+position = Vector2(5, 155)
+shape = SubResource("RectangleShape2D_dt2ld")
 
-[node name="ColorRect" type="ColorRect" parent="Plunger" unique_id=1389338666]
-offset_left = -15.0
-offset_top = -10.0
-offset_right = 15.0
-offset_bottom = 40.0
+[node name="VisualBlock" type="ColorRect" parent="Plunger" unique_id=824858503]
+offset_left = -12.0
+offset_top = -56.0
+offset_right = 18.0
+offset_bottom = -6.0
 color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="Chamber" type="Area2D" parent="Plunger" unique_id=1938297574]
+position = Vector2(-4, -47)
+
+[node name="TriggerShape" type="CollisionShape2D" parent="Plunger/Chamber" unique_id=1106735294]
+position = Vector2(1, -29)
+shape = SubResource("RectangleShape2D_65ytc")
 
 [node name="StaticEnvironment" type="StaticBody2D" parent="." unique_id=893622171]
 collision_layer = 3
@@ -122,17 +157,18 @@ color = Color(0.25, 0.25, 0.25, 1)
 polygon = PackedVector2Array(495, 648, 495, 180, 505, 180, 505, 648)
 
 [node name="LeftSlingshot" type="StaticBody2D" parent="StaticEnvironment" unique_id=1781501963]
-physics_material_override = SubResource("PhysicsMaterial_bumper")
+physics_material_override = SubResource("PhysicsMaterial_dt2ld")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=125095784]
-polygon = PackedVector2Array(40, 430, 100, 500, 100, 540, 40, 540)
+polygon = PackedVector2Array(37, 448, 70.30188, 486.8522, 97, 518, 97, 558, 37, 558)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=843280319]
+position = Vector2(-2, 21)
 color = Color(0.35, 0.35, 0.35, 1)
-polygon = PackedVector2Array(40, 430, 100, 500, 100, 540, 40, 540)
+polygon = PackedVector2Array(40, 430, 60.18512, 453.54935, 100, 500, 100, 540, 40, 540)
 
 [node name="RightSlingshot" type="StaticBody2D" parent="StaticEnvironment" unique_id=1295052989]
-physics_material_override = SubResource("PhysicsMaterial_bumper")
+physics_material_override = SubResource("PhysicsMaterial_6q13x")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=1600816620]
 polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
@@ -146,11 +182,12 @@ polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
 [node name="LeftInlaneDivider" type="StaticBody2D" parent="StaticEnvironment" unique_id=814247025]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/LeftInlaneDivider" unique_id=2068714849]
-polygon = PackedVector2Array(20, 380, 30, 380, 30, 520, 20, 520)
+polygon = PackedVector2Array(12, 380, 22, 380, 22, 520, 12, 520)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftInlaneDivider" unique_id=2035581073]
+position = Vector2(-8, 1)
 color = Color(0.4, 0.4, 0.8, 1)
-polygon = PackedVector2Array(20, 380, 30, 380, 30, 520, 20, 520)
+polygon = PackedVector2Array(20, 380, 30, 380, 29.999985, 433.51013, 30, 520, 20, 520, 20, 440)
 
 [node name="RightInlaneDivider" type="StaticBody2D" parent="StaticEnvironment" unique_id=1179487517]
 
@@ -170,34 +207,31 @@ shape = SubResource("RectangleShape2D_drain")
 
 [node name="LaunchGate" parent="." unique_id=2086909175 instance=ExtResource("4_17vu6")]
 position = Vector2(539, 187)
+physics_material_override = SubResource("PhysicsMaterial_mlu7g")
 
 [node name="RampTrigger" parent="." unique_id=1936923739 instance=ExtResource("5_rinyx")]
-position = Vector2(83, 355)
-
-[node name="RailVisual" type="Line2D" parent="RampTrigger" unique_id=99420185]
-position = Vector2(-1, 0)
-points = PackedVector2Array(-7, -3, -36, -58, -55, -144, -42, -223, 19, -300)
-width = 30.0
+position = Vector2(46, 321)
 
 [node name="RampTrigger2" parent="." unique_id=341281174 instance=ExtResource("5_rinyx")]
-position = Vector2(97, 63)
+position = Vector2(139, 23)
 trigger_type = "Exit"
 
-[node name="LaunchGate2" parent="." unique_id=1916518803 instance=ExtResource("4_17vu6")]
-position = Vector2(107, 55)
+[node name="WingRampGuardrails" parent="." unique_id=1128351773 instance=ExtResource("7_mlu7g")]
+position = Vector2(420, 181)
 
-[node name="WindRampGuardrails" parent="." unique_id=2033045788 instance=ExtResource("6_evd0j")]
-position = Vector2(149, 299)
+[node name="LeftTrackGuardrails" parent="." unique_id=1132358922 instance=ExtResource("8_dt2ld")]
+position = Vector2(146, 137)
+collision_layer = 3
 
-[node name="LeftWall" parent="WindRampGuardrails" index="0" unique_id=1887757501]
-position = Vector2(-107.04449, -106.333534)
-polygon = PackedVector2Array(21.044487, 160.33353, -9.955513, 112.333534, -15.955513, 82.33353, -29.955513, 19.333534, -18.955513, -56.666466, 45.044487, -139.66647, 40.044487, -146.66647, 8.044487, -104.666466, -23.955513, -66.666466, -34.0121, 6.824066, -36.955513, 28.333534, -33.955513, 50.333527, -26.955513, 78.33353, -14.955513, 115.333534, 14.044487, 166.33353)
+[node name="DropTarget" parent="." unique_id=1398348387 instance=ExtResource("4_dmmqx")]
+position = Vector2(208, 316)
 
-[node name="RightWall" parent="WindRampGuardrails" index="1" unique_id=1039063638]
-position = Vector2(-99.74999, -101)
-scale = Vector2(1.1562499, 1)
-polygon = PackedVector2Array(37.837833, 150, 28.324322, 124, 16.216213, 96, 4.972969, 44, 1.5135078, 20, 4.1081047, 0, 5.8378334, -12, 6.7026978, -43, 7.567562, -59, 13.62162, -66, 32.648647, -91, 58.594593, -130, 68.108116, -120, 50.81081, -97, 26.594593, -70, 15.351349, -39, 14.486485, 1, 15.351349, 46, 23.135132, 82, 26.594593, 99, 40.43243, 127, 45.621624, 143)
+[node name="DropTarget2" parent="." unique_id=61600048 instance=ExtResource("4_dmmqx")]
+position = Vector2(251, 316)
 
+[node name="DropTarget3" parent="." unique_id=4295652 instance=ExtResource("4_dmmqx")]
+position = Vector2(295, 316)
+
+[connection signal="body_entered" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_entered"]
+[connection signal="body_exited" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_exited"]
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
-
-[editable path="WindRampGuardrails"]

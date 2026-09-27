@@ -1,17 +1,21 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cqvm3exejtqcs"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dmmqx"]
+bounce = 1.2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
 size = Vector2(60, 10)
 
-[node name="LaunchGate" type="StaticBody2D"]
+[node name="LaunchGate" type="StaticBody2D" unique_id=27749818]
+physics_material_override = SubResource("PhysicsMaterial_dmmqx")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1767511182]
 shape = SubResource("RectangleShape2D_gate")
 one_way_collision = true
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=202722810]
 offset_left = -30.0
 offset_top = -5.0
 offset_right = 30.0
 offset_bottom = 5.0
-color = Color(0.5, 0.8, 1.0, 0.5)
+color = Color(0.5, 0.8, 1, 0.5)

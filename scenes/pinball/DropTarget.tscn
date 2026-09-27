@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bdq2pq1ho1asp"]
+
+[ext_resource type="Script" uid="uid://d18r0onq52jfd" path="res://scripts/physics/DropTarget.gd" id="1_bnjq3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Solid"]
+size = Vector2(40, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Hitbox"]
+size = Vector2(44, 84)
+
+[node name="DropTarget" type="StaticBody2D" unique_id=1398348387]
+script = ExtResource("1_bnjq3")
+
+[node name="VisualPlaceholder" type="ColorRect" parent="." unique_id=213366]
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = 40.0
+color = Color(0.5, 0.25, 0.15, 1)
+
+[node name="SolidWall" type="CollisionShape2D" parent="." unique_id=1099839154]
+shape = SubResource("RectangleShape2D_Solid")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=647208172]
+
+[node name="TriggerShape" type="CollisionShape2D" parent="Hitbox" unique_id=1723591674]
+shape = SubResource("RectangleShape2D_Hitbox")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
