@@ -207,7 +207,22 @@ func _test_main_scene() -> void:
 	_check(main.start_screen.visible and not main.game_screen.visible
 		and board.board_state == PinballController.BoardState.STOPPED,
 		"Play button opens New Game / Continue without starting the board")
-	main._on_continue_pressed()
+	var start_content: VBoxContainer = main.get_node("MainMenu/StartChoiceMenu/StartChoiceContent")
+	var new_game_button: Button = start_content.get_node("NewGameButton")
+	var back_button: Button = start_content.get_node("BackButton")
+	_check(main.start_screen.owner == main and start_content.owner == main
+		and new_game_button.owner == main and main.continue_button.owner == main
+		and back_button.owner == main,
+		"Start choice menu and buttons are editable scene nodes")
+	_check(new_game_button.pressed.is_connected(Callable(main, "_on_new_game_pressed"))
+		and main.continue_button.pressed.is_connected(Callable(main, "_on_continue_pressed"))
+		and back_button.pressed.is_connected(Callable(main, "_on_back_button_pressed")),
+		"Start choice buttons use scene signal connections")
+	back_button.pressed.emit()
+	_check(main.title_screen.visible and not main.start_screen.visible,
+		"Start choice Back button returns to the title")
+	main.get_node("MainMenu/Panel/PlayButton").pressed.emit()
+	main.continue_button.pressed.emit()
 	_check(main.gacha_screen.visible and main.profile.current_ball != null,
 		"Continue rolls a ball before the run")
 	var scene_reroll: Button = main.get_node("MainMenu/GachaMenu/Panel/GachaContent/RerollButton")
@@ -223,6 +238,8 @@ func _test_main_scene() -> void:
 	main._refresh_gacha()
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await process_frame
+	_check(main.enemy_sprite.texture == main.boss_1_texture,
+		"A new run shows the first boss sprite")
 	_check(main.game_screen.visible and not main.gacha_screen.visible
 		and manager.current_state == TurnManager.BattleState.PREP
 		and board.board_state == PinballController.BoardState.READY,
@@ -275,6 +292,8 @@ func _test_main_scene() -> void:
 	_check(main.profile.boss_index == 1 and manager.enemy_hp == 1000 and manager.player_hp == 85
 		and manager.balls_left == 1 and board.board_state == PinballController.BoardState.READY,
 		"Second boss starts at 1000 HP with remaining balls and player HP carried forward")
+	_check(main.enemy_sprite.texture == main.BOSS_2_TEXTURE,
+		"Second boss shows the Reveille sprite")
 	board.plunger.request_launch(2000.0)
 	manager.turn_score = 1000
 	board._on_drain_zone_body_entered(board.ball)
@@ -286,6 +305,8 @@ func _test_main_scene() -> void:
 		"Retry button returns to gacha and stops the completed battle")
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await process_frame
+	_check(main.enemy_sprite.texture == main.boss_1_texture,
+		"Retry restores the first boss sprite")
 	board.plunger.request_launch(2000.0)
 	board._on_drain_zone_body_entered(board.ball)
 	main._on_back_button_pressed()
