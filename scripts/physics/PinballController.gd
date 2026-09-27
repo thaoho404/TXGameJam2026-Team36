@@ -36,6 +36,11 @@ func _on_drain_zone_body_entered(body: Node2D) -> void:
 		# Stop all momentum
 		body.linear_velocity = Vector2.ZERO
 		body.angular_velocity = 0.0
+		body.z_index = 0
+		body.set_collision_mask_value(1, true)
+		body.set_collision_mask_value(2, false)
+		if body.has_meta(&"ramp_entry_armed_at"):
+			body.remove_meta(&"ramp_entry_armed_at")
 		
 		# Teleport back to the plunger lane
 		body.position = Vector2(535, 520)
