@@ -20,6 +20,8 @@
 [ext_resource type="Texture2D" uid="uid://cr06wbwc26a" path="res://art-assets/background/PinRoulette Title Screen (COMPLETE with Picture).png" id="12_i8jtn"]
 [ext_resource type="Texture2D" uid="uid://cv2x7nbrdlmp2" path="res://art-assets/background/PinRoulette Title Screen New Game or New Game Plus.png" id="13_startbg"]
 [ext_resource type="Texture2D" uid="uid://2i45kqtlisdw" path="res://art-assets/sprites/Credits.png" id="14_credits"]
+[ext_resource type="Texture2D" uid="uid://bp11fi212ldbc" path="res://art-assets/background/Upgrade Background.png" id="15_upgradebg"]
+[ext_resource type="Texture2D" uid="uid://cig2gvf2dh0l3" path="res://art-assets/sprites/bevo_laying_tv_idle.PNG" id="16_bevo_idle"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft73y"]
 atlas = ExtResource("2_thnqr")
@@ -127,11 +129,170 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Backdrop" type="ColorRect" parent="MainMenu/UpgradeMenu/Panel" unique_id=1208817734]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Background" type="TextureRect" parent="MainMenu/UpgradeMenu/Panel" unique_id=1655123092]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("15_upgradebg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WaitingBevo" type="TextureRect" parent="MainMenu/UpgradeMenu/Panel" unique_id=1316624087]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -156.0
+offset_right = 57.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("16_bevo_idle")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Header" type="VBoxContainer" parent="MainMenu/UpgradeMenu/Panel" unique_id=1590312288]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -176.0
+offset_top = -249.0
+offset_right = 164.0
+offset_bottom = -164.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Heading" type="Label" parent="MainMenu/UpgradeMenu/Panel/Header" unique_id=1133864790]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.77, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 30
+text = "Permanent Upgrades"
+horizontal_alignment = 1
+
+[node name="CurrencyLabel" type="Label" parent="MainMenu/UpgradeMenu/Panel/Header" unique_id=1920477361]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.77, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 20
+text = "Currency: 0"
+horizontal_alignment = 1
+
+[node name="UpgradeList" type="VBoxContainer" parent="MainMenu/UpgradeMenu/Panel" unique_id=1377520646]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = 21.0
+offset_right = 165.0
+offset_bottom = 221.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="BallsButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1466330119]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "Extra starting ball"
+flat = true
+
+[node name="RerollsButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1062953387]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "Extra reroll"
+flat = true
+
+[node name="DamageButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1829076454]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "Flat damage"
+flat = true
+
+[node name="HpButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1273698135]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "Maximum HP"
+flat = true
+
+[node name="MoneyButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1585206942]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "Currency multiplier"
+flat = true
+
 [node name="BackButton" type="TextureButton" parent="MainMenu/UpgradeMenu/Panel" unique_id=1944968351]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.3, 0.3)
+offset_left = 395.0
+offset_top = 310.0
+offset_right = 1574.0
+offset_bottom = 605.0
+scale = Vector2(0.1, 0.1)
 texture_normal = SubResource("AtlasTexture_ft73y")
 
 [node name="GachaMenu" type="Control" parent="MainMenu" unique_id=485860850]

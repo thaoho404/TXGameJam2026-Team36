@@ -54,34 +54,19 @@ func _ready() -> void:
 	_update_battle_ui()
 
 
-func _menu(parent: Control, heading: String) -> VBoxContainer:
-	var box := VBoxContainer.new()
-	box.set_anchors_preset(Control.PRESET_CENTER)
-	box.offset_left = -230
-	box.offset_top = -170
-	box.offset_right = 230
-	box.offset_bottom = 170
-	box.add_theme_constant_override("separation", 12)
-	parent.add_child(box)
-	var title := Label.new()
-	title.text = heading
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 30)
-	box.add_child(title)
-	return box
-
-
 func _build_menus() -> void:
-	#$MainMenu/UpgradeMenu/Panel/TempText.hide()
-	var upgrade_box := _menu($MainMenu/UpgradeMenu/Panel, "Permanent upgrades")
-	currency_label = Label.new()
-	currency_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	upgrade_box.add_child(currency_label)
+	# The upgrade screen's labels and buttons live in Main.tscn so they can be
+	# styled or swapped for art in the editor. Each button is named after its
+	# upgrade key, e.g. "balls" -> UpgradeList/BallsButton.
+	currency_label = $MainMenu/UpgradeMenu/Panel/Header/CurrencyLabel
+	var upgrade_list: Control = $MainMenu/UpgradeMenu/Panel/UpgradeList
 	var names := {"balls": "Extra starting ball", "rerolls": "Extra reroll", "damage": "Flat damage", "hp": "Maximum HP", "money": "Currency multiplier"}
 	for key in RunProfile.UPGRADE_KEYS:
-		var button := Button.new()
+		var button := upgrade_list.get_node_or_null(key.capitalize() + "Button") as Button
+		if button == null:
+			button = Button.new()
+			upgrade_list.add_child(button)
 		button.pressed.connect(_on_upgrade_pressed.bind(key))
-		upgrade_box.add_child(button)
 		upgrade_buttons[key] = {"button": button, "label": names[key]}
 
 	run_label = Label.new()
@@ -159,7 +144,7 @@ func _refresh_upgrades() -> void:
 		var cost := profile.upgrade_cost(key)
 		var entry: Dictionary = upgrade_buttons[key]
 		var button: Button = entry.button
-		button.text = "%s  Lv %d  —  %s" % [entry.label, profile.upgrades[key], "MAX" if cost < 0 else "%d currency" % cost]
+		button.text = "%s  Lv %d  •  %s" % [entry.label, profile.upgrades[key], "MAX" if cost < 0 else "%d currency" % cost]
 		button.disabled = cost < 0 or profile.currency < cost
 
 
