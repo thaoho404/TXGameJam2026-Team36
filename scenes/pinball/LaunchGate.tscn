@@ -7,6 +7,7 @@ bounce = 1.2
 size = Vector2(60, 10)
 
 [node name="LaunchGate" type="StaticBody2D" unique_id=27749818]
+collision_layer = 3
 physics_material_override = SubResource("PhysicsMaterial_dmmqx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1767511182]

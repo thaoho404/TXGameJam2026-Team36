@@ -2,12 +2,13 @@
 
 [ext_resource type="Script" uid="uid://csrtnhvh88wnw" path="res://scenes/ui/main.gd" id="1_yvcut"]
 [ext_resource type="Texture2D" uid="uid://d1cigp5uvpds6" path="res://art-assets/sprites/Go Back Button.png" id="2_thnqr"]
-[ext_resource type="Texture2D" uid="uid://c14vfgre5j6eb" path="res://art-assets/ui/UI_Panel.png" id="3_ui"]
+[ext_resource type="Script" uid="uid://yv8v5vxovmbn" path="res://scripts/core/TurnManager.gd" id="2_turn_manager"]
 [ext_resource type="Texture2D" uid="uid://bn68mmpqjorrj" path="res://art-assets/background/BattleBackground .PNG" id="3_upid4"]
 [ext_resource type="Texture2D" uid="uid://g7jsx1fkc1rt" path="res://art-assets/background/Health bar.PNG" id="4_umypx"]
 [ext_resource type="Texture2D" uid="uid://cwlo2yqj4eewj" path="res://art-assets/sprites/The Wrangler default sprite.PNG" id="4_upid4"]
 [ext_resource type="Texture2D" uid="uid://dv8jd8he0iykx" path="res://art-assets/background/title_screen_with_borders.png" id="5_fss6w"]
 [ext_resource type="PackedScene" uid="uid://bibie5uxpm0rm" path="res://scenes/pinball/PinballTable.tscn" id="5_table"]
+[ext_resource type="Texture2D" uid="uid://cbofh7xxihi1p" path="res://art-assets/background/BattleBorder_with_transparency.png" id="5_umypx"]
 [ext_resource type="Texture2D" uid="uid://dw8vqfb070im1" path="res://art-assets/sprites/pete default sprite.png" id="6_umypx"]
 [ext_resource type="Texture2D" uid="uid://bjpwps0g6prn" path="res://art-assets/sprites/Play Button.png" id="6_yvcut"]
 [ext_resource type="Texture2D" uid="uid://dv7kvbmaults7" path="res://art-assets/sprites/Exit Button.png" id="7_thnqr"]
@@ -22,13 +23,37 @@ region = Rect2(224.79283, 425.08276, 1179.6998, 295.81537)
 atlas = ExtResource("3_upid4")
 region = Rect2(186.984, 119.9506, 636.8626, 750.1518)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vonr2"]
+atlas = ExtResource("5_umypx")
+region = Rect2(0, 0, 1000, 1010)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1dkhi"]
+atlas = SubResource("AtlasTexture_vonr2")
+region = Rect2(136, 73, 714, 853)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_i8jtn"]
 atlas = ExtResource("4_upid4")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_hud"]
+bg_color = Color(0.96, 0.95, 0.83, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.17, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_te6ad"]
 atlas = ExtResource("6_umypx")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ner2"]
+atlas = ExtResource("4_umypx")
+region = Rect2(167, 116, 353, 122)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttd1q"]
 atlas = ExtResource("4_umypx")
 region = Rect2(167, 116, 353, 122)
 
@@ -59,6 +84,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yvcut")
+
+[node name="TurnManager" type="Node" parent="." unique_id=1411098744]
+script = ExtResource("2_turn_manager")
 
 [node name="MainMenu" type="Control" parent="." unique_id=370771292]
 layout_mode = 1
@@ -237,6 +265,13 @@ texture = SubResource("AtlasTexture_2guxs")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="BorderBackground" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1004033590]
+layout_mode = 1
+offset_right = 762.6667
+offset_bottom = 860.0
+scale = Vector2(0.75, 0.75)
+texture = SubResource("AtlasTexture_1dkhi")
+
 [node name="PlayerBevo" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=287280531]
 layout_mode = 1
 anchors_preset = 2
@@ -253,15 +288,31 @@ expand_mode = 1
 stretch_mode = 5
 flip_h = true
 
-[node name="DialogueBox" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1677895318]
+[node name="DialogueBox" type="Panel" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1677895318]
 layout_mode = 0
 offset_left = 30.0
-offset_top = 70.0
-offset_right = 230.0
-offset_bottom = 140.0
-texture = ExtResource("3_ui")
-expand_mode = 1
-stretch_mode = 5
+offset_top = 80.0
+offset_right = 260.0
+offset_bottom = 190.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_battle_hud")
+
+[node name="BattleStatus" type="Label" parent="MainMenu/GamePlay/HBoxContainer/CombatUI/DialogueBox" unique_id=1085869447]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = -12.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14, 0.14, 0.12, 1)
+theme_override_font_sizes/font_size = 17
+text = "Press Ready to start."
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="EnemySprite" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=93875696]
 layout_mode = 1
@@ -275,7 +326,7 @@ texture = SubResource("AtlasTexture_te6ad")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ScorePanel" type="TextureRect" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=913734246]
+[node name="ScorePanel" type="Panel" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=913734246]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -288,9 +339,22 @@ offset_right = -30.0
 offset_bottom = -30.0
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("3_ui")
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_battle_hud")
+
+[node name="ScoreLabel" type="Label" parent="MainMenu/GamePlay/HBoxContainer/CombatUI/ScorePanel" unique_id=1019429817]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14, 0.14, 0.12, 1)
+theme_override_font_sizes/font_size = 20
+text = "Score: 0
+Hits: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="EnemyHealthBar" type="TextureProgressBar" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=817736329]
 layout_mode = 1
@@ -303,6 +367,64 @@ scale = Vector2(0.33, 0.33)
 value = 100.0
 nine_patch_stretch = true
 texture_progress = SubResource("AtlasTexture_0ner2")
+
+[node name="EnemyHPLabel" type="Label" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=657259889]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 50.0
+offset_right = 280.0
+offset_bottom = 76.0
+theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "Enemy HP: 200 / 200"
+
+[node name="PlayerHPLabel" type="Label" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1418416901]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 381.0
+offset_top = -114.99994
+offset_right = 550.499
+offset_bottom = -88.99994
+grow_vertical = 0
+rotation = -0.38397244
+theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "Your HP: 100 / 100"
+
+[node name="PlayerHealthBar" type="TextureProgressBar" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=1692610897]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 265.0
+offset_top = -117.0
+offset_right = 403.5
+offset_bottom = -97.0
+grow_vertical = 0
+rotation = -0.38397244
+scale = Vector2(2, 2)
+mouse_filter = 2
+value = 100.0
+nine_patch_stretch = true
+texture_progress = SubResource("AtlasTexture_ttd1q")
+
+[node name="RetryButton" type="Button" parent="MainMenu/GamePlay/HBoxContainer/CombatUI" unique_id=40506751]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 158.0
+offset_top = -38.0
+offset_right = 274.0
+offset_bottom = -8.0
+grow_vertical = 0
+focus_mode = 0
+text = "Try Again"
 
 [node name="PinballBoard" type="SubViewportContainer" parent="MainMenu/GamePlay/HBoxContainer" unique_id=2098449194]
 layout_mode = 2
@@ -374,6 +496,7 @@ stretch_mode = 5
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/ReadyButton" to="." method="_on_ready_button_pressed"]
 [connection signal="pressed" from="MainMenu/CreditMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton" to="." method="_on_retry_button_pressed"]
 [connection signal="pressed" from="MainMenu/Panel/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MainMenu/Panel/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="MainMenu/Panel/CreditsButton" to="." method="_on_credits_button_pressed"]

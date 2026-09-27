@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dqok7377bm062" path="res://scenes/pinball/IceTunnel.tscn" id="8_dt2ld"]
 [ext_resource type="Script" uid="uid://bf8pw6s0m6kv7" path="res://scripts/physics/RampEntrance.gd" id="9_dt2ld"]
 [ext_resource type="Script" uid="uid://dnhibhg0p7s71" path="res://scripts/physics/RampExit.gd" id="9_mlu7g"]
+[ext_resource type="Script" uid="uid://kf5xpsy0enqr" path="res://scripts/physics/SpringBumper.gd" id="10_spring"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
 bounce = 1.6
@@ -39,6 +40,9 @@ bounce = 1.6
 friction = 0.1
 bounce = 1.6
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_spring"]
+bounce = 1.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_drain"]
 size = Vector2(800, 50)
 
@@ -52,11 +56,11 @@ size = Vector2(30, 6)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_entrance_gate"]
 size = Vector2(100, 8)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3itm"]
-size = Vector2(70, 61)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit_backstop"]
 size = Vector2(110, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3itm"]
+size = Vector2(70, 61)
 
 [node name="PinballTable" type="Node2D" unique_id=2069753559]
 script = ExtResource("1_script")
@@ -156,7 +160,7 @@ shape = SubResource("RectangleShape2D_65ytc")
 collision_layer = 3
 
 [node name="OuterShell" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1998701843]
-polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -50, -50, -50, -50, 648, 0, 648)
+polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -200, -50, -200, -50, 648, 0, 648)
 
 [node name="OuterVisual" type="Polygon2D" parent="StaticEnvironment" unique_id=1255592296]
 color = Color(0.25, 0.25, 0.25, 1)
@@ -211,6 +215,50 @@ polygon = PackedVector2Array(470, 380, 480, 380, 480, 520, 470, 520)
 color = Color(0.4, 0.4, 0.8, 1)
 polygon = PackedVector2Array(470, 380, 480, 380, 480, 520, 470, 520)
 
+[node name="LeftSpringBumper" type="StaticBody2D" parent="." unique_id=1976846624]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_spring")
+script = ExtResource("10_spring")
+kick_direction = Vector2(0.87, -0.49)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LeftSpringBumper" unique_id=2145642508]
+position = Vector2(0, 28)
+polygon = PackedVector2Array(37, 430, 92, 498, 94, 532, 101, 534, 100, 493, 37, 415)
+
+[node name="Visual" type="Polygon2D" parent="LeftSpringBumper" unique_id=798476290]
+position = Vector2(-1, 28)
+color = Color(0.72, 0.74, 0.75, 1)
+polygon = PackedVector2Array(37, 430, 94, 497, 95, 533, 100, 533, 99, 494, 38, 420)
+
+[node name="Trigger" type="Area2D" parent="LeftSpringBumper" unique_id=182119580]
+collision_layer = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LeftSpringBumper/Trigger" unique_id=194466825]
+position = Vector2(7, 11)
+polygon = PackedVector2Array(29, 447, 85, 512, 87, 550, 92, 550, 91, 511, 30, 437)
+
+[node name="RightSpringBumper" type="StaticBody2D" parent="." unique_id=1435508047]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_spring")
+script = ExtResource("10_spring")
+kick_direction = Vector2(-0.93, -0.37)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightSpringBumper" unique_id=1674545862]
+position = Vector2(6, -6)
+polygon = PackedVector2Array(455, 440, 443, 452, 398, 502, 397, 546, 391, 545, 390, 502, 454, 428)
+
+[node name="Visual" type="Polygon2D" parent="RightSpringBumper" unique_id=1126441278]
+position = Vector2(25, 8)
+color = Color(0.72, 0.74, 0.75, 1)
+polygon = PackedVector2Array(436, 423, 380, 488, 379, 532, 373, 532, 372, 488, 435, 414)
+
+[node name="Trigger" type="Area2D" parent="RightSpringBumper" unique_id=1732669296]
+collision_layer = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightSpringBumper/Trigger" unique_id=725569122]
+position = Vector2(12, -4)
+polygon = PackedVector2Array(449, 437, 393, 500, 393, 545, 381, 544, 380, 497, 447, 421)
+
 [node name="DrainZone" type="Area2D" parent="." unique_id=1249235281]
 position = Vector2(250, 670)
 
@@ -243,48 +291,50 @@ collision_layer = 2
 [node name="LowerRampForce" type="Area2D" parent="RampSystem" unique_id=863551578]
 collision_layer = 2
 gravity_space_override = 1
+gravity_point_center = Vector2(0, -1)
 gravity_direction = Vector2(0, -1)
 gravity = 1600.0
 
 [node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/LowerRampForce" unique_id=647378672]
 polygon = PackedVector2Array(7, 340, 85, 340, 85, 150, 97, 140, 7, 90)
 
-[node name="UpperRampForce" type="Area2D" parent="RampSystem"]
+[node name="UpperRampForce" type="Area2D" parent="RampSystem" unique_id=2123312749]
 collision_layer = 2
 gravity_space_override = 1
+gravity_point_center = Vector2(0.5547, -0.83205)
 gravity_direction = Vector2(0.5547, -0.83205)
 gravity = 1600.0
 
-[node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/UpperRampForce"]
+[node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/UpperRampForce" unique_id=1253531605]
 polygon = PackedVector2Array(0, 95, 140, -55, 180, 15, 97, 145)
 
 [node name="RampEntrance" type="Node2D" parent="RampSystem" unique_id=484157773]
 script = ExtResource("9_dt2ld")
 
-[node name="FrontSensor" type="Area2D" parent="RampSystem/RampEntrance"]
+[node name="FrontSensor" type="Area2D" parent="RampSystem/RampEntrance" unique_id=253866104]
 position = Vector2(45, 385)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/FrontSensor" unique_id=175544719]
 shape = SubResource("RectangleShape2D_nrfn0")
 
-[node name="CommitSensor" type="Area2D" parent="RampSystem/RampEntrance"]
+[node name="CommitSensor" type="Area2D" parent="RampSystem/RampEntrance" unique_id=564805986]
 position = Vector2(45, 315)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/CommitSensor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/CommitSensor" unique_id=1250121928]
 shape = SubResource("RectangleShape2D_nrfn0")
 
-[node name="EntranceGate" type="StaticBody2D" parent="RampSystem"]
+[node name="EntranceGate" type="StaticBody2D" parent="RampSystem" unique_id=1482286070]
 position = Vector2(45, 344)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/EntranceGate"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/EntranceGate" unique_id=777758909]
 shape = SubResource("RectangleShape2D_entrance_gate")
 one_way_collision = true
 
-[node name="ExitBackstop" type="StaticBody2D" parent="RampSystem"]
+[node name="ExitBackstop" type="StaticBody2D" parent="RampSystem" unique_id=993459131]
 position = Vector2(140, 12)
 rotation = 0.588003
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/ExitBackstop"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/ExitBackstop" unique_id=47527402]
 shape = SubResource("RectangleShape2D_exit_backstop")
 one_way_collision = true
 
@@ -299,6 +349,8 @@ shape = SubResource("RectangleShape2D_t3itm")
 
 [connection signal="body_entered" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_entered"]
 [connection signal="body_exited" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_exited"]
+[connection signal="body_entered" from="LeftSpringBumper/Trigger" to="LeftSpringBumper" method="_on_trigger_body_entered"]
+[connection signal="body_entered" from="RightSpringBumper/Trigger" to="RightSpringBumper" method="_on_trigger_body_entered"]
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
 [connection signal="body_entered" from="RampSystem/RampEntrance/FrontSensor" to="RampSystem/RampEntrance" method="_on_front_sensor_body_entered"]
 [connection signal="body_entered" from="RampSystem/RampEntrance/CommitSensor" to="RampSystem/RampEntrance" method="_on_commit_sensor_body_entered"]
