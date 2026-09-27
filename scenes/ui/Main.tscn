@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://c42hrr28l3j6" path="res://art-assets/sprites/Credits Button.png" id="8_gl1th"]
 [ext_resource type="Texture2D" uid="uid://c180kbvn4jgb8" path="res://art-assets/sprites/Upgrade Button.png" id="9_upid4"]
 [ext_resource type="Texture2D" uid="uid://cr06wbwc26a" path="res://art-assets/background/PinRoulette Title Screen (COMPLETE with Picture).png" id="12_i8jtn"]
+[ext_resource type="Texture2D" uid="uid://cv2x7nbrdlmp2" path="res://art-assets/background/PinRoulette Title Screen New Game or New Game Plus.png" id="13_startbg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft73y"]
 atlas = ExtResource("2_thnqr")
@@ -85,6 +86,8 @@ region = Rect2(227.22815, 461.69574, 1170.3999, 241.79694)
 [sub_resource type="AtlasTexture" id="AtlasTexture_a3qfc"]
 atlas = ExtResource("9_upid4")
 region = Rect2(162.06805, 481.67352, 1252.7136, 244.3692)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_start_focus"]
 
 [node name="Main" type="Control" unique_id=1426743038]
 layout_mode = 3
@@ -550,14 +553,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Backdrop" type="ColorRect" parent="MainMenu/StartChoiceMenu" unique_id=636784171]
+[node name="BorderBackground" type="TextureRect" parent="MainMenu/StartChoiceMenu" unique_id=636784171]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.07, 0.06, 0.12, 0.95)
+mouse_filter = 2
+texture = ExtResource("5_fss6w")
+expand_mode = 1
+
+[node name="Background" type="TextureRect" parent="MainMenu/StartChoiceMenu" unique_id=1602283915]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("13_startbg")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="StartChoiceContent" type="VBoxContainer" parent="MainMenu/StartChoiceMenu" unique_id=949374952]
 layout_mode = 1
@@ -566,31 +583,93 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -230.0
-offset_top = -170.0
-offset_right = 230.0
-offset_bottom = 170.0
+offset_left = -178.0
+offset_top = -110.0
+offset_right = 212.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 12
+rotation = -0.07
+pivot_offset = Vector2(195, 155)
+theme_override_constants/separation = 4
+alignment = 1
 
 [node name="Heading" type="Label" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1331239469]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Choose a game"
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 40
+text = "Choose Your Game"
 horizontal_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1784405521]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.49019608, 0, 0, 1)
+
+[node name="Spacer" type="Control" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1219930057]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
 
 [node name="NewGameButton" type="Button" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=548034443]
 layout_mode = 2
-text = "New Game — reset upgrades and currency"
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.2, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.29, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49019608, 0, 0, 0.35)
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "New Game"
+flat = true
+
+[node name="NewGameHint" type="Label" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1495036118]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 18
+text = "A fresh start. Resets upgrades and currency."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer2" type="Control" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1873314220]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
 
 [node name="ContinueButton" type="Button" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=963522664]
 layout_mode = 2
-text = "Continue — use saved upgrades"
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.49019608, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.2, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.29, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.49019608, 0, 0, 0.35)
+theme_override_fonts/font = ExtResource("5_3nd05")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/focus = SubResource("StyleBoxEmpty_start_focus")
+text = "Continue"
+flat = true
 
-[node name="BackButton" type="Button" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1453731827]
+[node name="ContinueHint" type="Label" parent="MainMenu/StartChoiceMenu/StartChoiceContent" unique_id=1106694751]
 layout_mode = 2
-text = "Back"
+theme_override_colors/font_color = Color(0.49019608, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_acbhb")
+theme_override_font_sizes/font_size = 18
+text = "Pick up where you left off with your saved upgrades."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BackButton" type="TextureButton" parent="MainMenu/StartChoiceMenu" unique_id=1453731827]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 100.0
+offset_right = 1338.0
+offset_bottom = 395.0
+scale = Vector2(0.15, 0.15)
+texture_normal = SubResource("AtlasTexture_ft73y")
 
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/GachaContent/RerollButton" to="." method="_on_reroll_pressed"]
@@ -604,4 +683,4 @@ text = "Back"
 [connection signal="pressed" from="MainMenu/Panel/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/NewGameButton" to="." method="_on_new_game_pressed"]
 [connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/ContinueButton" to="." method="_on_continue_pressed"]
-[connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/StartChoiceMenu/BackButton" to="." method="_on_back_button_pressed"]
