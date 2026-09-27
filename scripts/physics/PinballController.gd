@@ -10,15 +10,12 @@ enum BoardState { STOPPED, PREPARING, READY, IN_PLAY }
 
 @export var bumper_points: int = 10
 @export var spawn_position: Vector2 = Vector2(535, 520)
-<<<<<<< HEAD
 @export_range(0.0, 2.0, 0.05) var bumper_score_cooldown_seconds: float = 0.35
 @export_range(0.0, 3.0, 0.05) var wheel_score_cooldown_seconds: float = 1.0
 @export_range(0, 1000, 1) var element_strip_points: int = 25
-=======
 @export_range(0.25, 10.0, 0.25) var launch_lane_stall_seconds: float = 2.0
 @export_range(1.0, 20.0, 0.5) var launch_lane_max_seconds: float = 6.0
 @export var launch_lane_rescue_position: Vector2 = Vector2(250, 245)
->>>>>>> 29a4018526ca3f538e26ed751e276994085adad5
 
 @onready var left_flipper: AnimatableBody2D = $Flippers/LeftFlipper
 @onready var right_flipper: AnimatableBody2D = $Flippers/RightFlipper
@@ -32,14 +29,12 @@ var board_state: BoardState = BoardState.STOPPED
 var _request_revision: int = 0
 var _initial_sprite_scale: Vector2
 var _initial_collision_mask: int
-<<<<<<< HEAD
 var _last_bumper_score_ms: Dictionary[int, int] = {}
 
 const LEFT_REST_ANGLE := deg_to_rad(18.0)
 const LEFT_ACTIVE_ANGLE := deg_to_rad(-28.0)
 const RIGHT_REST_ANGLE := deg_to_rad(-18.0)
 const RIGHT_ACTIVE_ANGLE := deg_to_rad(28.0)
-=======
 var _initial_ball_texture: Texture2D
 var _bumper_types: Dictionary = {}
 var _target_hits: int = 0
@@ -51,7 +46,6 @@ var _still_time: float = 0.0
 var _rescue_pending: bool = false
 const BUMPER_ELEMENTS := [BevoData.ElementType.NORMAL, BevoData.ElementType.WATER, BevoData.ElementType.GRASS, BevoData.ElementType.FIRE, BevoData.ElementType.EARTH, BevoData.ElementType.ICE, BevoData.ElementType.WIND, BevoData.ElementType.ELECTRIC, BevoData.ElementType.STEEL, BevoData.ElementType.FAIRY, BevoData.ElementType.DARK]
 const TARGET_ELEMENTS := [BevoData.ElementType.PSYCHIC, BevoData.ElementType.GHOST, BevoData.ElementType.NORMAL, BevoData.ElementType.WATER, BevoData.ElementType.GRASS, BevoData.ElementType.FIRE, BevoData.ElementType.EARTH, BevoData.ElementType.ICE, BevoData.ElementType.WIND, BevoData.ElementType.ELECTRIC, BevoData.ElementType.STEEL, BevoData.ElementType.FAIRY, BevoData.ElementType.DARK]
->>>>>>> 29a4018526ca3f538e26ed751e276994085adad5
 
 
 func _ready() -> void:
@@ -79,10 +73,7 @@ func _physics_process(delta: float) -> void:
 	if controls_enabled and Input.is_action_pressed("ui_right"):
 		right_flipper.rotation = move_toward(right_flipper.rotation, RIGHT_ACTIVE_ANGLE, 35 * delta)
 	else:
-<<<<<<< HEAD
 		right_flipper.rotation = move_toward(right_flipper.rotation, RIGHT_REST_ANGLE, 20 * delta)
-=======
-		right_flipper.rotation = move_toward(right_flipper.rotation, deg_to_rad(-25), 20 * delta)
 	_watch_launch_lane(delta)
 
 
@@ -144,7 +135,6 @@ func _rescue_stuck_ball(revision: int) -> void:
 	_reset_launch_lane_watch()
 	if return_to_plunger:
 		ball_rearmed.emit()
->>>>>>> 29a4018526ca3f538e26ed751e276994085adad5
 
 
 func prepare_next_ball() -> void:
@@ -214,13 +204,10 @@ func _apply_preparation(revision: int) -> void:
 	ball.set_collision_mask_value(1, true)
 	ball.set_collision_mask_value(2, false)
 	ball_sprite.scale = _initial_sprite_scale
-<<<<<<< HEAD
 	_last_bumper_score_ms.clear()
 	ball_trap.reset_trap()
 	element_strips.reset_strips()
-=======
 	_last_speed_multiplier = 1.0
->>>>>>> 29a4018526ca3f538e26ed751e276994085adad5
 	if ball.has_meta(&"ramp_entry_armed_at"):
 		ball.remove_meta(&"ramp_entry_armed_at")
 	board_state = BoardState.READY
@@ -245,7 +232,6 @@ func _on_plunger_ball_launched() -> void:
 func _on_ball_body_entered(body: Node) -> void:
 	if board_state != BoardState.IN_PLAY or body.get_parent() != $Bumpers:
 		return
-<<<<<<< HEAD
 	var now_ms := Time.get_ticks_msec()
 	var bumper_id := body.get_instance_id()
 	var last_score_ms: int = _last_bumper_score_ms.get(bumper_id, -1000000)
@@ -257,8 +243,6 @@ func _on_ball_body_entered(body: Node) -> void:
 	if now_ms - last_score_ms < int(cooldown_seconds * 1000.0):
 		return
 	_last_bumper_score_ms[bumper_id] = now_ms
-	bumper_hit.emit(BevoData.ElementType.NORMAL, maxi(0, bumper_points))
-=======
 	bumper_hit.emit(_bumper_types.get(body, BevoData.ElementType.NORMAL), maxi(0, bumper_points))
 
 
@@ -269,7 +253,6 @@ func _on_target_hit() -> void:
 	if _target_hits >= 5:
 		_target_hits = 0
 		bumper_hit.emit(TARGET_ELEMENTS[_rng.randi_range(0, TARGET_ELEMENTS.size() - 1)], maxi(0, bumper_points))
->>>>>>> 29a4018526ca3f538e26ed751e276994085adad5
 
 
 func _on_drain_zone_body_entered(body: Node2D) -> void:

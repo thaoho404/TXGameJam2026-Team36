@@ -209,7 +209,7 @@ func _test_main_scene() -> void:
 		"Play button opens New Game / Continue without starting the board")
 	var start_content: VBoxContainer = main.get_node("MainMenu/StartChoiceMenu/StartChoiceContent")
 	var new_game_button: Button = start_content.get_node("NewGameButton")
-	var back_button: Button = start_content.get_node("BackButton")
+	var back_button: TextureButton = main.get_node("MainMenu/StartChoiceMenu/BackButton")
 	_check(main.start_screen.owner == main and start_content.owner == main
 		and new_game_button.owner == main and main.continue_button.owner == main
 		and back_button.owner == main,

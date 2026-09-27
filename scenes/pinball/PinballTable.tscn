@@ -280,12 +280,8 @@ physics_material_override = SubResource("PhysicsMaterial_dt2ld")
 polygon = PackedVector2Array(37, 448, 70.30188, 486.8522, 97, 518, 97, 558, 37, 558)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=843280319]
-<<<<<<< HEAD
 visible = false
 position = Vector2(-2, 21)
-=======
-position = Vector2(-3, 19)
->>>>>>> 29a4018526ca3f538e26ed751e276994085adad5
 color = Color(0.35, 0.35, 0.35, 1)
 polygon = PackedVector2Array(40, 430, 60.18512, 453.54935, 100, 500, 100, 540, 40, 540)
 
