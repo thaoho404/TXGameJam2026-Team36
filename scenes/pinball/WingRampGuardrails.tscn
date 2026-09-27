@@ -1,11 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://csfrq3kxa6sio"]
 
-[node name="WingRampGuardrails" type="StaticBody2D"]
+[node name="WingRampGuardrails" type="StaticBody2D" unique_id=218434861]
 collision_layer = 2
 collision_mask = 0
 
-[node name="InnerGuardrail" type="CollisionPolygon2D" parent="."]
+[node name="InnerGuardrail" type="CollisionPolygon2D" parent="." unique_id=1975638556]
 polygon = PackedVector2Array(30, 200, 30, 0, -100, -100, -110, -90, 20, 10, 20, 200)
 
-[node name="OuterGuardrail" type="CollisionPolygon2D" parent="."]
+[node name="OuterGuardrail" type="CollisionPolygon2D" parent="." unique_id=856114441]
 polygon = PackedVector2Array(70, 200, 70, -15, -60, -115, -50, -125, 80, -25, 80, 200)

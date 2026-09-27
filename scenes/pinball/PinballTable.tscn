@@ -2,21 +2,30 @@
 
 [ext_resource type="Script" uid="uid://bxcqwwgyw071x" path="res://scripts/physics/PinballController.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c735vwnxgmtc3" path="res://scenes/pinball/BevoBall.tscn" id="2_ball"]
-[ext_resource type="Texture2D" uid="uid://d0x2phql0onc1" path="res://art-assets/ui/Elemental_Bumper.png" id="3_bumper"]
 [ext_resource type="PackedScene" uid="uid://cqvm3exejtqcs" path="res://scenes/pinball/LaunchGate.tscn" id="4_17vu6"]
 [ext_resource type="PackedScene" uid="uid://bdq2pq1ho1asp" path="res://scenes/pinball/DropTarget.tscn" id="4_dmmqx"]
 [ext_resource type="Script" uid="uid://cw2knlq4ylfsu" path="res://scripts/physics/Plunger.gd" id="4_mlu7g"]
-[ext_resource type="PackedScene" path="res://scenes/pinball/WingRampGuardrails.tscn" id="7_mlu7g"]
-[ext_resource type="PackedScene" uid="uid://dqok7377bm062" path="res://scenes/pinball/IceTunnel.tscn" id="8_dt2ld"]
 [ext_resource type="Script" uid="uid://bf8pw6s0m6kv7" path="res://scripts/physics/RampEntrance.gd" id="9_dt2ld"]
 [ext_resource type="Script" uid="uid://dnhibhg0p7s71" path="res://scripts/physics/RampExit.gd" id="9_mlu7g"]
+[ext_resource type="Texture2D" uid="uid://bot56f7qalnb1" path="res://art-assets/background/pinball_bg_complete.PNG" id="10_background"]
 [ext_resource type="Script" uid="uid://kf5xpsy0enqr" path="res://scripts/physics/SpringBumper.gd" id="10_spring"]
+[ext_resource type="Texture2D" uid="uid://2k1c5mayobbo" path="res://art-assets/sprites/normal_bumper.PNG" id="11_normal_bumper"]
+[ext_resource type="Texture2D" uid="uid://dfpbiserusiu6" path="res://art-assets/sprites/fire_bumper.PNG" id="12_fire_bumper"]
+[ext_resource type="Texture2D" uid="uid://buwdgvod8iirw" path="res://art-assets/sprites/water_bumper.PNG" id="13_water_bumper"]
+[ext_resource type="Texture2D" uid="uid://c8c8e58ai0goi" path="res://art-assets/sprites/grass_bumper.PNG" id="14_grass_bumper"]
+[ext_resource type="PackedScene" path="res://scenes/pinball/BallTrap.tscn" id="15_ball_trap"]
+[ext_resource type="Script" uid="uid://bywwtb3dn7jsg" path="res://scripts/physics/IceRamp.gd" id="16_ice_ramp"]
+[ext_resource type="Script" uid="uid://bpqwbha73xu3k" path="res://scripts/physics/ElementStripBank.gd" id="17_element_strips"]
+[ext_resource type="Script" uid="uid://bud1sgxgw11t1" path="res://scripts/physics/RampConveyor.gd" id="18_ramp_conveyor"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
 bounce = 1.6
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bumper"]
-radius = 12.0
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wheel_bumper"]
+radius = 48.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flipper"]
 size = Vector2(115, 24)
@@ -50,20 +59,32 @@ size = Vector2(800, 50)
 friction = 0.4
 bounce = 2.15
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nrfn0"]
-size = Vector2(30, 6)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ice_area"]
+size = Vector2(130, 44)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_entrance_gate"]
-size = Vector2(100, 8)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_element_strip"]
+size = Vector2(28, 10)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit_backstop"]
-size = Vector2(110, 8)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wind_area"]
+size = Vector2(130, 54)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3itm"]
-size = Vector2(70, 61)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wind_rail"]
+size = Vector2(140, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wind_sensor"]
+size = Vector2(6, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wind_exit"]
+size = Vector2(10, 64)
 
 [node name="PinballTable" type="Node2D" unique_id=2069753559]
 script = ExtResource("1_script")
+
+[node name="PlayfieldBackground" type="Sprite2D" parent="." unique_id=1064032553]
+z_index = -10
+position = Vector2(287, 324)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("10_background")
 
 [node name="BevoBall" parent="." unique_id=1291116846 instance=ExtResource("2_ball")]
 position = Vector2(535, 520)
@@ -71,57 +92,96 @@ position = Vector2(535, 520)
 [node name="Bumpers" type="Node2D" parent="." unique_id=1194494422]
 
 [node name="Bumper1" type="StaticBody2D" parent="Bumpers" unique_id=436842858]
-position = Vector2(250, 100)
+position = Vector2(172, 127)
 physics_material_override = SubResource("PhysicsMaterial_bumper")
 
 [node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper1" unique_id=1572185373]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_bumper")
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("11_normal_bumper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper1" unique_id=315841680]
 shape = SubResource("CircleShape2D_bumper")
 
 [node name="Bumper2" type="StaticBody2D" parent="Bumpers" unique_id=217969656]
-position = Vector2(160, 180)
+position = Vector2(303, 251)
 physics_material_override = SubResource("PhysicsMaterial_bumper")
 
 [node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper2" unique_id=1965554465]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_bumper")
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("12_fire_bumper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper2" unique_id=111379720]
 shape = SubResource("CircleShape2D_bumper")
 
 [node name="Bumper3" type="StaticBody2D" parent="Bumpers" unique_id=735390005]
-position = Vector2(340, 180)
+position = Vector2(187, 315)
 physics_material_override = SubResource("PhysicsMaterial_bumper")
 
 [node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper3" unique_id=1890489927]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_bumper")
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("13_water_bumper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper3" unique_id=1083230875]
 shape = SubResource("CircleShape2D_bumper")
 
+[node name="Bumper4" type="StaticBody2D" parent="Bumpers" unique_id=2116784950]
+position = Vector2(303, 392)
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper4" unique_id=328834745]
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("14_grass_bumper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper4" unique_id=324059981]
+shape = SubResource("CircleShape2D_bumper")
+
+[node name="BumperWheelLeft" type="StaticBody2D" parent="Bumpers" unique_id=1245433421]
+position = Vector2(186, 485)
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/BumperWheelLeft" unique_id=1172107108]
+shape = SubResource("CircleShape2D_wheel_bumper")
+
+[node name="BumperWheelRight" type="StaticBody2D" parent="Bumpers" unique_id=1119763370]
+position = Vector2(359, 485)
+physics_material_override = SubResource("PhysicsMaterial_bumper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/BumperWheelRight" unique_id=1635051596]
+shape = SubResource("CircleShape2D_wheel_bumper")
+
 [node name="Flippers" type="Node2D" parent="." unique_id=1755207357]
 
 [node name="LeftFlipper" type="AnimatableBody2D" parent="Flippers" unique_id=562195799]
-position = Vector2(124, 568.00006)
-rotation = 0.45
+position = Vector2(168, 558)
+rotation = 0.314159
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Flippers/LeftFlipper" unique_id=1519090450]
 position = Vector2(57, 0)
 shape = SubResource("RectangleShape2D_flipper")
 
 [node name="ColorRect" type="ColorRect" parent="Flippers/LeftFlipper" unique_id=1317101411]
+visible = false
 offset_top = -12.0
 offset_right = 115.0
 offset_bottom = 12.0
 color = Color(0.2, 0.8, 0.2, 1)
 
+[node name="OuterVisual" type="Polygon2D" parent="Flippers/LeftFlipper" unique_id=1473671633]
+color = Color(0.1, 0.08, 0.08, 1)
+polygon = PackedVector2Array(0, -14, 82, -12, 110, -7, 116, 0, 110, 7, 82, 12, 0, 14)
+
+[node name="InnerVisual" type="Polygon2D" parent="Flippers/LeftFlipper" unique_id=1102826408]
+color = Color(0.88, 0.12, 0.1, 1)
+polygon = PackedVector2Array(3, -10, 80, -9, 105, -5, 110, 0, 105, 5, 80, 9, 3, 10)
+
+[node name="PivotCap" type="Polygon2D" parent="Flippers/LeftFlipper" unique_id=516307241]
+z_index = 1
+color = Color(0.78, 0.78, 0.82, 1)
+polygon = PackedVector2Array(-15, 0, -11, -11, 0, -15, 11, -11, 15, 0, 11, 11, 0, 15, -11, 11)
+
 [node name="RightFlipper" type="AnimatableBody2D" parent="Flippers" unique_id=910145351]
-position = Vector2(382, 570)
-rotation = -0.45
+position = Vector2(406, 558)
+rotation = -0.314159
 physics_material_override = SubResource("PhysicsMaterial_65ytc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Flippers/RightFlipper" unique_id=1471452771]
@@ -129,10 +189,24 @@ position = Vector2(-57.00003, 6.1035156e-05)
 shape = SubResource("RectangleShape2D_mlu7g")
 
 [node name="ColorRect" type="ColorRect" parent="Flippers/RightFlipper" unique_id=2140992801]
+visible = false
 offset_left = -115.0
 offset_top = -12.0
 offset_bottom = 12.0
 color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="OuterVisual" type="Polygon2D" parent="Flippers/RightFlipper" unique_id=844909006]
+color = Color(0.1, 0.08, 0.08, 1)
+polygon = PackedVector2Array(0, -14, -82, -12, -110, -7, -116, 0, -110, 7, -82, 12, 0, 14)
+
+[node name="InnerVisual" type="Polygon2D" parent="Flippers/RightFlipper" unique_id=986949895]
+color = Color(0.88, 0.12, 0.1, 1)
+polygon = PackedVector2Array(-3, -10, -80, -9, -105, -5, -110, 0, -105, 5, -80, 9, -3, 10)
+
+[node name="PivotCap" type="Polygon2D" parent="Flippers/RightFlipper" unique_id=2062811630]
+z_index = 1
+color = Color(0.78, 0.78, 0.82, 1)
+polygon = PackedVector2Array(-15, 0, -11, -11, 0, -15, 11, -11, 15, 0, 11, 11, 0, 15, -11, 11)
 
 [node name="Plunger" type="StaticBody2D" parent="." unique_id=773173788]
 position = Vector2(535, 600)
@@ -143,6 +217,7 @@ position = Vector2(5, 155)
 shape = SubResource("RectangleShape2D_dt2ld")
 
 [node name="VisualBlock" type="ColorRect" parent="Plunger" unique_id=824858503]
+visible = false
 offset_left = -12.0
 offset_top = -56.0
 offset_right = 18.0
@@ -163,6 +238,7 @@ collision_layer = 3
 polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -200, -50, -200, -50, 648, 0, 648)
 
 [node name="OuterVisual" type="Polygon2D" parent="StaticEnvironment" unique_id=1255592296]
+visible = false
 color = Color(0.25, 0.25, 0.25, 1)
 polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -50, -50, -50, -50, 648, 0, 648)
 
@@ -170,27 +246,32 @@ polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100
 polygon = PackedVector2Array(495, 648, 495, 180, 505, 180, 505, 648)
 
 [node name="DividerVisual" type="Polygon2D" parent="StaticEnvironment" unique_id=381185003]
+visible = false
 color = Color(0.25, 0.25, 0.25, 1)
 polygon = PackedVector2Array(495, 648, 495, 180, 505, 180, 505, 648)
 
 [node name="LeftSlingshot" type="StaticBody2D" parent="StaticEnvironment" unique_id=1781501963]
+position = Vector2(45, 0)
 physics_material_override = SubResource("PhysicsMaterial_dt2ld")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=125095784]
 polygon = PackedVector2Array(37, 448, 70.30188, 486.8522, 97, 518, 97, 558, 37, 558)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=843280319]
+visible = false
 position = Vector2(-2, 21)
 color = Color(0.35, 0.35, 0.35, 1)
 polygon = PackedVector2Array(40, 430, 60.18512, 453.54935, 100, 500, 100, 540, 40, 540)
 
 [node name="RightSlingshot" type="StaticBody2D" parent="StaticEnvironment" unique_id=1295052989]
+position = Vector2(-45, 0)
 physics_material_override = SubResource("PhysicsMaterial_6q13x")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=1600816620]
 polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=95379997]
+visible = false
 position = Vector2(-23, -34.363647)
 scale = Vector2(1.05, 1.0636364)
 color = Color(0.35, 0.35, 0.35, 1)
@@ -202,6 +283,7 @@ polygon = PackedVector2Array(460, 430, 400, 500, 400, 540, 460, 540)
 polygon = PackedVector2Array(12, 380, 22, 380, 22, 520, 12, 520)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftInlaneDivider" unique_id=2035581073]
+visible = false
 position = Vector2(-8, 1)
 color = Color(0.4, 0.4, 0.8, 1)
 polygon = PackedVector2Array(20, 380, 30, 380, 29.999985, 433.51013, 30, 520, 20, 520, 20, 440)
@@ -212,6 +294,7 @@ polygon = PackedVector2Array(20, 380, 30, 380, 29.999985, 433.51013, 30, 520, 20
 polygon = PackedVector2Array(470, 380, 480, 380, 480, 520, 470, 520)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/RightInlaneDivider" unique_id=767161725]
+visible = false
 color = Color(0.4, 0.4, 0.8, 1)
 polygon = PackedVector2Array(470, 380, 480, 380, 480, 520, 470, 520)
 
@@ -270,88 +353,239 @@ shape = SubResource("RectangleShape2D_drain")
 position = Vector2(539, 187)
 physics_material_override = SubResource("PhysicsMaterial_mlu7g")
 
-[node name="WingRampGuardrails" parent="." unique_id=1128351773 instance=ExtResource("7_mlu7g")]
-position = Vector2(420, 181)
-
 [node name="DropTarget" parent="." unique_id=1398348387 instance=ExtResource("4_dmmqx")]
+visible = false
 position = Vector2(208, 316)
 
 [node name="DropTarget2" parent="." unique_id=61600048 instance=ExtResource("4_dmmqx")]
+visible = false
 position = Vector2(251, 316)
 
 [node name="DropTarget3" parent="." unique_id=4295652 instance=ExtResource("4_dmmqx")]
+visible = false
 position = Vector2(295, 316)
+
+[node name="BallTrap" parent="." unique_id=574626724 instance=ExtResource("15_ball_trap")]
+position = Vector2(245, 180)
+
+[node name="RightIceRamp" type="Node2D" parent="." unique_id=1248256655]
+position = Vector2(408, 335)
+rotation = 0.78
+
+[node name="IceArea" type="Area2D" parent="RightIceRamp" unique_id=683894395]
+script = ExtResource("16_ice_ramp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightIceRamp/IceArea" unique_id=1544892015]
+shape = SubResource("RectangleShape2D_ice_area")
+
+[node name="Visual" type="Polygon2D" parent="RightIceRamp/IceArea" unique_id=485767710]
+z_index = 1
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-70, -28, 52, -28, 68, -19, 70, 12, 58, 28, -55, 28, -70, 15)
+
+[node name="PaintedSurface" type="Polygon2D" parent="RightIceRamp/IceArea" unique_id=2055186401]
+z_index = 2
+color = Color(0.36, 0.78, 0.92, 1)
+polygon = PackedVector2Array(-63, -20, 49, -20, 61, -13, 62, 9, 52, 20, -52, 20, -63, 11)
+
+[node name="IceFacet" type="Polygon2D" parent="RightIceRamp/IceArea" unique_id=105935494]
+z_index = 3
+color = Color(0.78, 0.94, 0.95, 0.95)
+polygon = PackedVector2Array(-52, -14, -20, -16, -6, 15, -35, 17)
+
+[node name="IceFacet2" type="Polygon2D" parent="RightIceRamp/IceArea" unique_id=1744379356]
+z_index = 3
+color = Color(0.58, 0.87, 0.94, 0.9)
+polygon = PackedVector2Array(7, -16, 42, -14, 28, 16, -5, 15)
+
+[node name="DirectionArrowOutline" type="Polygon2D" parent="RightIceRamp/IceArea" unique_id=393658988]
+z_index = 4
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(20, -10, -17, -10, -17, -18, -52, 0, -17, 18, -17, 10, 20, 10)
+
+[node name="DirectionArrow" type="Polygon2D" parent="RightIceRamp/IceArea" unique_id=467102802]
+z_index = 5
+color = Color(0.16, 0.38, 0.68, 1)
+polygon = PackedVector2Array(18, -6, -22, -6, -22, -12, -45, 0, -22, 12, -22, 6, 18, 6)
+
+[node name="Rails" type="Node2D" parent="RightIceRamp" unique_id=364913287]
+
+[node name="UpperRailVisual" type="Polygon2D" parent="RightIceRamp/Rails" unique_id=1163642668]
+z_index = 3
+position = Vector2(0, -26)
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-69, -6, 59, -6, 69, -2, 67, 6, -61, 6, -69, 2)
+
+[node name="UpperRailPaint" type="Polygon2D" parent="RightIceRamp/Rails" unique_id=1710551112]
+z_index = 4
+position = Vector2(0, -26)
+color = Color(0.82, 0.9, 0.91, 1)
+polygon = PackedVector2Array(-64, -3, 58, -3, 64, -1, 62, 3, -59, 3, -64, 1)
+
+[node name="LowerRailVisual" type="Polygon2D" parent="RightIceRamp/Rails" unique_id=226034632]
+z_index = 3
+position = Vector2(0, 26)
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-69, -6, 61, -6, 69, -2, 67, 6, -58, 6, -69, 2)
+
+[node name="LowerRailPaint" type="Polygon2D" parent="RightIceRamp/Rails" unique_id=1544333610]
+z_index = 4
+position = Vector2(0, 26)
+color = Color(0.82, 0.9, 0.91, 1)
+polygon = PackedVector2Array(-64, -3, 59, -3, 64, -1, 62, 3, -57, 3, -64, 1)
+
+[node name="ElementStrips" type="Node2D" parent="." unique_id=1731568598]
+script = ExtResource("17_element_strips")
+
+[node name="Strip1" type="Area2D" parent="ElementStrips" unique_id=85584137]
+position = Vector2(245, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementStrips/Strip1" unique_id=127355878]
+shape = SubResource("RectangleShape2D_element_strip")
+
+[node name="Visual" type="Polygon2D" parent="ElementStrips/Strip1" unique_id=787549148]
+color = Color(1, 0.25, 0.12, 1)
+polygon = PackedVector2Array(-14, -5, 14, -5, 14, 5, -14, 5)
+
+[node name="Strip2" type="Area2D" parent="ElementStrips" unique_id=807883574]
+position = Vector2(287, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementStrips/Strip2" unique_id=2100922121]
+shape = SubResource("RectangleShape2D_element_strip")
+
+[node name="Visual" type="Polygon2D" parent="ElementStrips/Strip2" unique_id=1974853198]
+color = Color(0.2, 0.65, 1, 1)
+polygon = PackedVector2Array(-14, -5, 14, -5, 14, 5, -14, 5)
+
+[node name="Strip3" type="Area2D" parent="ElementStrips" unique_id=1068501027]
+position = Vector2(329, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementStrips/Strip3" unique_id=542088289]
+shape = SubResource("RectangleShape2D_element_strip")
+
+[node name="Visual" type="Polygon2D" parent="ElementStrips/Strip3" unique_id=1181102885]
+color = Color(0.35, 1, 0.3, 1)
+polygon = PackedVector2Array(-14, -5, 14, -5, 14, 5, -14, 5)
 
 [node name="RampSystem" type="Node2D" parent="." unique_id=1332086593]
 
-[node name="LeftTrackGuardrails" parent="RampSystem" unique_id=1132358922 instance=ExtResource("8_dt2ld")]
-position = Vector2(146, 137)
+[node name="WindRamp" type="Node2D" parent="RampSystem" unique_id=1847975797]
+position = Vector2(88, 345)
+rotation = -0.78
+
+[node name="WindArea" type="Area2D" parent="RampSystem/WindRamp" unique_id=812433196]
+collision_layer = 0
+script = ExtResource("18_ramp_conveyor")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/WindRamp/WindArea" unique_id=806548477]
+shape = SubResource("RectangleShape2D_wind_area")
+
+[node name="Outline" type="Polygon2D" parent="RampSystem/WindRamp" unique_id=626199144]
+z_index = 1
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-72, -33, 55, -33, 71, -21, 72, 17, 58, 33, -57, 33, -72, 19)
+
+[node name="PaintedSurface" type="Polygon2D" parent="RampSystem/WindRamp" unique_id=805681571]
+z_index = 2
+color = Color(0.55, 0.75, 0.55, 1)
+polygon = PackedVector2Array(-65, -25, 52, -25, 63, -16, 64, 13, 52, 25, -51, 25, -65, 14)
+
+[node name="WindStreak1" type="Polygon2D" parent="RampSystem/WindRamp" unique_id=19356818]
+z_index = 3
+color = Color(0.82, 0.9, 0.66, 0.95)
+polygon = PackedVector2Array(-54, -17, 15, -17, 6, -10, -50, -10)
+
+[node name="WindStreak2" type="Polygon2D" parent="RampSystem/WindRamp" unique_id=570702782]
+z_index = 3
+color = Color(0.36, 0.61, 0.52, 0.95)
+polygon = PackedVector2Array(-35, 11, 46, 11, 55, 17, -44, 17)
+
+[node name="DirectionArrowOutline" type="Polygon2D" parent="RampSystem/WindRamp" unique_id=1299454409]
+z_index = 4
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-24, -10, 12, -10, 12, -17, 43, 0, 12, 17, 12, 10, -24, 10)
+
+[node name="DirectionArrow" type="Polygon2D" parent="RampSystem/WindRamp" unique_id=1680910861]
+z_index = 5
+color = Color(0.17, 0.43, 0.31, 1)
+polygon = PackedVector2Array(-21, -6, 15, -6, 15, -11, 37, 0, 15, 11, 15, 6, -21, 6)
+
+[node name="Rails" type="StaticBody2D" parent="RampSystem/WindRamp" unique_id=960763072]
 collision_layer = 2
+collision_mask = 0
 
-[node name="LowerRampForce" type="Area2D" parent="RampSystem" unique_id=863551578]
-collision_layer = 2
-gravity_space_override = 1
-gravity_point_center = Vector2(0, -1)
-gravity_direction = Vector2(0, -1)
-gravity = 1600.0
+[node name="UpperRail" type="CollisionShape2D" parent="RampSystem/WindRamp/Rails" unique_id=1875314422]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_wind_rail")
 
-[node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/LowerRampForce" unique_id=647378672]
-polygon = PackedVector2Array(7, 340, 85, 340, 85, 150, 97, 140, 7, 90)
+[node name="UpperRailOutline" type="Polygon2D" parent="RampSystem/WindRamp/Rails" unique_id=1401287072]
+z_index = 6
+position = Vector2(0, -32)
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-72, -6, 61, -6, 72, -2, 69, 6, -62, 6, -72, 2)
 
-[node name="UpperRampForce" type="Area2D" parent="RampSystem" unique_id=2123312749]
-collision_layer = 2
-gravity_space_override = 1
-gravity_point_center = Vector2(0.5547, -0.83205)
-gravity_direction = Vector2(0.5547, -0.83205)
-gravity = 1600.0
+[node name="UpperRailPaint" type="Polygon2D" parent="RampSystem/WindRamp/Rails" unique_id=1969410675]
+z_index = 7
+position = Vector2(0, -32)
+color = Color(0.76, 0.79, 0.67, 1)
+polygon = PackedVector2Array(-67, -3, 60, -3, 67, -1, 64, 3, -60, 3, -67, 1)
 
-[node name="ForceShape" type="CollisionPolygon2D" parent="RampSystem/UpperRampForce" unique_id=1253531605]
-polygon = PackedVector2Array(0, 95, 140, -55, 180, 15, 97, 145)
+[node name="LowerRail" type="CollisionShape2D" parent="RampSystem/WindRamp/Rails" unique_id=2059686224]
+position = Vector2(0, 32)
+shape = SubResource("RectangleShape2D_wind_rail")
 
-[node name="RampEntrance" type="Node2D" parent="RampSystem" unique_id=484157773]
+[node name="LowerRailOutline" type="Polygon2D" parent="RampSystem/WindRamp/Rails" unique_id=1566801972]
+z_index = 6
+position = Vector2(0, 32)
+color = Color(0.04, 0.05, 0.09, 1)
+polygon = PackedVector2Array(-72, -6, 62, -6, 72, -2, 69, 6, -61, 6, -72, 2)
+
+[node name="LowerRailPaint" type="Polygon2D" parent="RampSystem/WindRamp/Rails" unique_id=1116876178]
+z_index = 7
+position = Vector2(0, 32)
+color = Color(0.76, 0.79, 0.67, 1)
+polygon = PackedVector2Array(-67, -3, 60, -3, 67, -1, 64, 3, -59, 3, -67, 1)
+
+[node name="RampEntrance" type="Node2D" parent="RampSystem/WindRamp" unique_id=1299253016]
 script = ExtResource("9_dt2ld")
+entrance_boost = 450.0
+ramp_direction = Vector2(1, 0)
+entry_center_half_width = 20.0
+center_on_local_y = true
 
-[node name="FrontSensor" type="Area2D" parent="RampSystem/RampEntrance" unique_id=253866104]
-position = Vector2(45, 385)
+[node name="FrontSensor" type="Area2D" parent="RampSystem/WindRamp/RampEntrance" unique_id=1053909505]
+position = Vector2(-70, 0)
+collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/FrontSensor" unique_id=175544719]
-shape = SubResource("RectangleShape2D_nrfn0")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/WindRamp/RampEntrance/FrontSensor" unique_id=404556235]
+shape = SubResource("RectangleShape2D_wind_sensor")
 
-[node name="CommitSensor" type="Area2D" parent="RampSystem/RampEntrance" unique_id=564805986]
-position = Vector2(45, 315)
+[node name="CommitSensor" type="Area2D" parent="RampSystem/WindRamp/RampEntrance" unique_id=1378621224]
+position = Vector2(-35, 0)
+collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampEntrance/CommitSensor" unique_id=1250121928]
-shape = SubResource("RectangleShape2D_nrfn0")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/WindRamp/RampEntrance/CommitSensor" unique_id=209856320]
+shape = SubResource("RectangleShape2D_wind_sensor")
 
-[node name="EntranceGate" type="StaticBody2D" parent="RampSystem" unique_id=1482286070]
-position = Vector2(45, 344)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/EntranceGate" unique_id=777758909]
-shape = SubResource("RectangleShape2D_entrance_gate")
-one_way_collision = true
-
-[node name="ExitBackstop" type="StaticBody2D" parent="RampSystem" unique_id=993459131]
-position = Vector2(140, 12)
-rotation = 0.588003
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/ExitBackstop" unique_id=47527402]
-shape = SubResource("RectangleShape2D_exit_backstop")
-one_way_collision = true
-
-[node name="RampExit" type="Area2D" parent="RampSystem" unique_id=216285063]
-position = Vector2(1, -15)
-collision_layer = 2
+[node name="RampExit" type="Area2D" parent="RampSystem/WindRamp" unique_id=1066382925]
+position = Vector2(64, 0)
+collision_layer = 0
 script = ExtResource("9_mlu7g")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/RampExit" unique_id=810355615]
-position = Vector2(139, 27.5)
-shape = SubResource("RectangleShape2D_t3itm")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RampSystem/WindRamp/RampExit" unique_id=296051824]
+shape = SubResource("RectangleShape2D_wind_exit")
 
 [connection signal="body_entered" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_entered"]
 [connection signal="body_exited" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_exited"]
 [connection signal="body_entered" from="LeftSpringBumper/Trigger" to="LeftSpringBumper" method="_on_trigger_body_entered"]
 [connection signal="body_entered" from="RightSpringBumper/Trigger" to="RightSpringBumper" method="_on_trigger_body_entered"]
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
-[connection signal="body_entered" from="RampSystem/RampEntrance/FrontSensor" to="RampSystem/RampEntrance" method="_on_front_sensor_body_entered"]
-[connection signal="body_entered" from="RampSystem/RampEntrance/CommitSensor" to="RampSystem/RampEntrance" method="_on_commit_sensor_body_entered"]
-[connection signal="body_entered" from="RampSystem/RampExit" to="RampSystem/RampExit" method="_on_body_entered"]
+[connection signal="score_tick" from="BallTrap" to="." method="_on_ball_trap_score_tick"]
+[connection signal="body_entered" from="RightIceRamp/IceArea" to="RightIceRamp/IceArea" method="_on_body_entered"]
+[connection signal="element_triggered" from="ElementStrips" to="." method="_on_element_strips_triggered"]
+[connection signal="body_entered" from="ElementStrips/Strip1" to="ElementStrips" method="_on_strip_body_entered"]
+[connection signal="body_entered" from="ElementStrips/Strip2" to="ElementStrips" method="_on_strip_body_entered"]
+[connection signal="body_entered" from="ElementStrips/Strip3" to="ElementStrips" method="_on_strip_body_entered"]
+[connection signal="body_entered" from="RampSystem/WindRamp/RampEntrance/FrontSensor" to="RampSystem/WindRamp/RampEntrance" method="_on_front_sensor_body_entered"]
+[connection signal="body_entered" from="RampSystem/WindRamp/RampEntrance/CommitSensor" to="RampSystem/WindRamp/RampEntrance" method="_on_commit_sensor_body_entered"]
+[connection signal="body_entered" from="RampSystem/WindRamp/RampExit" to="RampSystem/WindRamp/RampExit" method="_on_body_entered"]
