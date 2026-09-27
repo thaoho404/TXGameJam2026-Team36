@@ -1,5 +1,7 @@
 extends StaticBody2D
 
+signal valid_hit()
+
 var is_dropped: bool = false
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
@@ -9,6 +11,7 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		return
 		
 	is_dropped = true
+	valid_hit.emit()
 	
 	# Hide the 1930s lineman art
 	$VisualPlaceholder.hide() 

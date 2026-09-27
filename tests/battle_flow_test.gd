@@ -204,9 +204,12 @@ func _test_main_scene() -> void:
 	_check(not board.plunger.request_launch(2000.0) and board.ball.freeze,
 		"Hidden board cannot launch from the title menu")
 	main.get_node("MainMenu/Panel/PlayButton").pressed.emit()
-	_check(main.gacha_screen.visible and not main.game_screen.visible
+	_check(main.start_screen.visible and not main.game_screen.visible
 		and board.board_state == PinballController.BoardState.STOPPED,
-		"Play button opens gacha without starting the board")
+		"Play button opens New Game / Continue without starting the board")
+	main._on_continue_pressed()
+	_check(main.gacha_screen.visible and main.profile.current_ball != null,
+		"Continue rolls a ball before the run")
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await process_frame
 	_check(main.game_screen.visible and not main.gacha_screen.visible
@@ -224,7 +227,12 @@ func _test_main_scene() -> void:
 	# Physical ball trajectories are deliberately excluded from this deterministic test.
 	board.ball.body_entered.emit(bumper)
 	board.ball.body_entered.emit(bumper)
-	var expected_score: int = 2 * board.bumper_points
+	var reaction := ReactionTable.new().get_reaction(board._bumper_types[bumper], manager.selected_ball.element)
+	var strength: float = manager.selected_ball.reaction_strength_mult
+	var multiplier: float = reaction.multiplier
+	if strength > 1.0:
+		multiplier = maxf(0.0, 1.0 + (multiplier - 1.0) * strength)
+	var expected_score: int = 2 * roundi(board.bumper_points * multiplier * manager.selected_ball.score_currency_multiplier)
 	_check(manager.turn_score == expected_score
 		and ("Score: %d" % expected_score) in main.score_label.text,
 		"Bumper contact signals update turn score and live score text")
@@ -246,11 +254,22 @@ func _test_main_scene() -> void:
 	manager.enemy_hp = 1
 	board.plunger.request_launch(2000.0)
 	board.ball.body_entered.emit(bumper)
+	manager.turn_score = maxi(1, manager.turn_score)
 	board._on_drain_zone_body_entered(board.ball)
 	var won := await _wait_for_state(manager, TurnManager.BattleState.VICTORY)
-	_check(won and main.retry_button.visible and "Victory!" in main.battle_status.text
+	_check(won and not main.retry_button.visible and "Boss defeated!" in main.battle_status.text
 		and board.board_state == PinballController.BoardState.STOPPED,
-		"Victory displays its result and retry button while stopping the board")
+		"First boss defeat pauses before the next opponent")
+	await create_timer(1.3).timeout
+	_check(main.profile.boss_index == 1 and manager.enemy_hp == 1000 and manager.player_hp == 85
+		and manager.balls_left == 1 and board.board_state == PinballController.BoardState.READY,
+		"Second boss starts at 1000 HP with remaining balls and player HP carried forward")
+	board.plunger.request_launch(2000.0)
+	manager.turn_score = 1000
+	board._on_drain_zone_body_entered(board.ball)
+	var final_win := await _wait_for_state(manager, TurnManager.BattleState.VICTORY)
+	_check(final_win and main.retry_button.visible and "Victory!" in main.battle_status.text,
+		"Defeating the final boss completes the run even when the last ball was spent")
 	main.retry_button.pressed.emit()
 	_check(main.gacha_screen.visible and manager.current_state == TurnManager.BattleState.IDLE,
 		"Retry button returns to gacha and stops the completed battle")

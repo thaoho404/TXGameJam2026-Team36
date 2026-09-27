@@ -2,7 +2,8 @@ class_name BevoData
 extends Resource
 
 enum ElementType {
-	NORMAL, FIRE, WATER, ELECTRIC, GRASS, ICE, WIND, EARTH, STEEL, FAIRY, DARK, GOLD
+	NORMAL, FIRE, WATER, ELECTRIC, GRASS, ICE, WIND, EARTH, STEEL, FAIRY, DARK, GOLD,
+	PSYCHIC, GHOST
 }
 
 @export var bevo_name: String = "Standard Bevo"

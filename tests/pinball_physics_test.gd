@@ -19,10 +19,14 @@ func _run() -> void:
 	var main: Control = load("res://scenes/ui/Main.tscn").instantiate()
 	root.add_child(main)
 	await physics_frame
+	main._on_continue_pressed()
+	main.profile.current_ball = GachaRoller.new().get_type("normal")
 	main.get_node("MainMenu/GachaMenu/Panel/ReadyButton").pressed.emit()
 	await physics_frame
 	await physics_frame
 	var board: PinballController = main.get_node("MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport/PinballTable")
+	for bumper in board.get_node("Bumpers").get_children():
+		board._bumper_types[bumper] = BevoData.ElementType.NORMAL
 	var manager: TurnManager = main.get_node("TurnManager")
 	manager.player_attack_delay = 0.01
 	manager.enemy_attack_delay = 0.01
@@ -64,7 +68,7 @@ func _run() -> void:
 
 	var score_before_springs: int = manager.turn_score
 	var spring_checks := [
-		["LeftSpringBumper", Vector2(102, 474), Vector2(-400, 200)],
+		["LeftSpringBumper", Vector2(92, 474), Vector2(-400, 200)],
 		["RightSpringBumper", Vector2(398, 453), Vector2(400, 200)]
 	]
 	for spring_check in spring_checks:

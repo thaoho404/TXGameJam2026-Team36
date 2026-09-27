@@ -161,6 +161,28 @@ collision_layer = 3
 
 [node name="OuterShell" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1998701843]
 polygon = PackedVector2Array(0, 100, 50, 20, 250, -10, 400, 0, 500, 30, 574, 100, 574, 648, 620, 648, 620, -200, -50, -200, -50, 648, 0, 648)
+disabled = true
+
+[node name="LeftOuterWall" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1174230429]
+polygon = PackedVector2Array(-50, -200, 0, 100, 0, 648, -50, 648)
+
+[node name="RightOuterWall" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=452244653]
+polygon = PackedVector2Array(574, 100, 620, -200, 620, 648, 574, 648)
+
+[node name="RoofLeftCorner" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=83022874]
+polygon = PackedVector2Array(0, 100, 50, 20, 50, -200, -50, -200)
+
+[node name="RoofLeftSlope" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=290701903]
+polygon = PackedVector2Array(50, 20, 250, -10, 250, -200, 50, -200)
+
+[node name="RoofCenter" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=1524587149]
+polygon = PackedVector2Array(250, -10, 400, 0, 400, -200, 250, -200)
+
+[node name="RoofRightSlope" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=470573006]
+polygon = PackedVector2Array(400, 0, 500, 30, 500, -200, 400, -200)
+
+[node name="RoofRightCorner" type="CollisionPolygon2D" parent="StaticEnvironment" unique_id=739991589]
+polygon = PackedVector2Array(500, 30, 574, 100, 620, -200, 500, -200)
 
 [node name="OuterVisual" type="Polygon2D" parent="StaticEnvironment" unique_id=1255592296]
 color = Color(0.25, 0.25, 0.25, 1)
@@ -180,7 +202,7 @@ physics_material_override = SubResource("PhysicsMaterial_dt2ld")
 polygon = PackedVector2Array(37, 448, 70.30188, 486.8522, 97, 518, 97, 558, 37, 558)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/LeftSlingshot" unique_id=843280319]
-position = Vector2(-2, 21)
+position = Vector2(-3, 19)
 color = Color(0.35, 0.35, 0.35, 1)
 polygon = PackedVector2Array(40, 430, 60.18512, 453.54935, 100, 500, 100, 540, 40, 540)
 
@@ -234,8 +256,8 @@ polygon = PackedVector2Array(37, 430, 94, 497, 95, 533, 100, 533, 99, 494, 38, 4
 collision_layer = 0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LeftSpringBumper/Trigger" unique_id=194466825]
-position = Vector2(7, 11)
-polygon = PackedVector2Array(29, 447, 85, 512, 87, 550, 92, 550, 91, 511, 30, 437)
+position = Vector2(-3, 15)
+polygon = PackedVector2Array(42, 446, 42, 420, 106, 502, 108, 548, 90, 548, 88, 498)
 
 [node name="RightSpringBumper" type="StaticBody2D" parent="." unique_id=1435508047]
 collision_layer = 3

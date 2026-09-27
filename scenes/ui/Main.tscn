@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b8y4g5v1x2q3"]
 
-[ext_resource type="Script" uid="uid://csrtnhvh88wnw" path="res://scenes/ui/main.gd" id="1_yvcut"]
+[ext_resource type="Script" uid="uid://bphrbxgwfpnab" path="res://scenes/ui/main.gd" id="1_yvcut"]
 [ext_resource type="Texture2D" uid="uid://d1cigp5uvpds6" path="res://art-assets/sprites/Go Back Button.png" id="2_thnqr"]
 [ext_resource type="Script" uid="uid://yv8v5vxovmbn" path="res://scripts/core/TurnManager.gd" id="2_turn_manager"]
 [ext_resource type="Texture2D" uid="uid://bn68mmpqjorrj" path="res://art-assets/background/BattleBackground .PNG" id="3_upid4"]
@@ -437,6 +437,7 @@ size = Vector2i(574, 648)
 render_target_update_mode = 4
 
 [node name="PinballTable" parent="MainMenu/GamePlay/HBoxContainer/PinballBoard/SubViewport" unique_id=1735385479 instance=ExtResource("5_table")]
+position = Vector2(9, -14)
 
 [node name="Panel" type="Panel" parent="MainMenu" unique_id=191818130]
 visible = false
