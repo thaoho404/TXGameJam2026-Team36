@@ -2,11 +2,16 @@ extends RigidBody2D
 
 @export_range(100.0, 10000.0, 100.0) var max_linear_speed: float = 3200.0
 @export_range(0.0, 1000.0, 25.0) var wheel_escape_impulse: float = 650.0
+@export_range(2, 6, 1) var wheel_escape_contacts: int = 3
+@export_range(0.1, 2.0, 0.05) var wheel_escape_window_seconds: float = 0.65
 @export_range(0.0, 200.0, 5.0) var stall_speed: float = 55.0
 @export_range(0.1, 5.0, 0.05) var stall_seconds: float = 0.4
 @export_range(0.0, 1000.0, 25.0) var stall_escape_speed: float = 480.0
 
 var _last_wheel_escape_ms: int = -1000000
+var _last_wheel_hit_ms: int = -1000000
+var _last_wheel_name: StringName = &""
+var _wheel_pocket_hits: int = 0
 var _stall_elapsed: float = 0.0
 var _roof_points := PackedVector2Array()
 var _ball_radius: float = 25.0
@@ -72,7 +77,7 @@ func _on_body_entered(body: Node) -> void:
 	if body.name.begins_with("Bumper"):
 		print("Hit ", body.name)
 		if body.name.begins_with("BumperWheel"):
-			_kick_out_of_lower_wheels(body)
+			_maybe_escape_lower_wheels(body)
 		var sprite := body.get_node_or_null("Sprite2D") as Sprite2D
 		if sprite:
 			sprite.modulate = Color(2, 2, 2) 
@@ -80,19 +85,39 @@ func _on_body_entered(body: Node) -> void:
 			tween.tween_property(sprite, "modulate", Color(1, 1, 1), 0.2)
 
 
-func _kick_out_of_lower_wheels(wheel: Node2D) -> void:
+func _maybe_escape_lower_wheels(wheel: Node2D) -> void:
+	var bumpers := wheel.get_parent()
+	var left_wheel := bumpers.get_node_or_null("BumperWheelLeft") as Node2D
+	var right_wheel := bumpers.get_node_or_null("BumperWheelRight") as Node2D
+	var collision := wheel.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if left_wheel == null or right_wheel == null or collision == null or not collision.shape is CircleShape2D:
+		return
+	var contact_radius := (collision.shape as CircleShape2D).radius + _ball_radius
+	# Only the narrow gap between the inner wheel faces can trap the ball.
+	var inside_pocket := (
+		global_position.x >= left_wheel.global_position.x + contact_radius - 12.0
+		and global_position.x <= right_wheel.global_position.x - contact_radius + 12.0
+		and absf(global_position.y - wheel.global_position.y) <= contact_radius
+	)
+	if not inside_pocket:
+		_wheel_pocket_hits = 0
+		_last_wheel_name = &""
+		return
+
 	var now_ms := Time.get_ticks_msec()
+	if now_ms - _last_wheel_hit_ms > roundi(wheel_escape_window_seconds * 1000.0) or wheel.name == _last_wheel_name:
+		_wheel_pocket_hits = 1
+	else:
+		_wheel_pocket_hits += 1
+	_last_wheel_hit_ms = now_ms
+	_last_wheel_name = wheel.name
+	if _wheel_pocket_hits < wheel_escape_contacts:
+		return
+	_wheel_pocket_hits = 0
 	if now_ms - _last_wheel_escape_ms < 180:
 		return
 	_last_wheel_escape_ms = now_ms
 
-	# Push up and away from the narrow center pocket between the two wheels.
-	# Clearing this in one shot matters: with bounce > 1 on the wheels, a weak
-	# kick just lets the ball ping-pong back and forth between them instead of
-	# escaping, which is what "getting stuck" actually looks like here.
-	var horizontal_direction := -1.0 if wheel.name.ends_with("Left") else 1.0
-	var escape_direction := Vector2(horizontal_direction * 0.55, -1.0).normalized()
-	# Cancel the existing velocity first so the escape impulse isn't fighting
-	# whatever rebound direction the ball currently has.
+	# A genuine ping-pong trap gets one straight-up escape, with no ramp bias.
 	linear_velocity = Vector2.ZERO
-	apply_central_impulse(escape_direction * wheel_escape_impulse)
+	apply_central_impulse(Vector2.UP * wheel_escape_impulse)
