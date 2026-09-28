@@ -34,11 +34,20 @@ func _run() -> void:
 	await physics_frame
 	var board: PinballController = main.pinball_table
 	var manager: TurnManager = main.turn_manager
+	_check(board.plunger.request_launch(600.0), "A weak launch leaves the plunger")
+	await create_timer(2.0).timeout
+	_check(board.plunger._armed_ball == board.ball and "relaunch" in main.battle_status.text.to_lower(),
+		"A ball returning naturally to the plunger shows the relaunch prompt")
 	board.launch_lane_stall_seconds = 0.2
 	board.launch_lane_max_seconds = 0.6
 	_check(board.plunger.request_launch(2000.0), "Initial launch succeeds")
 	var stock := manager.balls_left
 	var turn := manager.turn_number
+
+	_place_stuck_ball(board, Vector2(535, 145))
+	await create_timer(0.3).timeout
+	_check(board.ball.position.distance_to(board.launch_lane_rescue_position) < 80.0,
+		"Ball trapped above the launch gate returns to the playfield")
 
 	_place_stuck_ball(board, Vector2(535, 300))
 	await create_timer(0.3).timeout

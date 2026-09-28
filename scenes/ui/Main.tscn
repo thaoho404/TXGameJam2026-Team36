@@ -27,6 +27,8 @@
 [ext_resource type="AudioStream" uid="uid://d0e8fncigpomq" path="res://audio/sfx_got-enough-points-for-pull-notif.wav" id="19_upgrade_success"]
 [ext_resource type="AudioStream" uid="uid://dnm7y18ubrn7g" path="res://audio/sfx_hurtsound-earth.wav" id="20_enemy_hit"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_start_focus"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft73y"]
 atlas = ExtResource("2_thnqr")
 region = Rect2(224.79283, 425.08276, 1179.6998, 295.81537)
@@ -94,8 +96,6 @@ region = Rect2(227.22815, 461.69574, 1170.3999, 241.79694)
 atlas = ExtResource("9_upid4")
 region = Rect2(162.06805, 481.67352, 1252.7136, 244.3692)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_start_focus"]
-
 [node name="Main" type="Control" unique_id=1426743038]
 layout_mode = 3
 anchors_preset = 15
@@ -111,13 +111,13 @@ script = ExtResource("2_turn_manager")
 [node name="MenuClickSound" type="AudioStreamPlayer" parent="." unique_id=1238637437]
 stream = ExtResource("17_menu_click")
 
-[node name="GachaGetSound" type="AudioStreamPlayer" parent="."]
+[node name="GachaGetSound" type="AudioStreamPlayer" parent="." unique_id=268572832]
 stream = ExtResource("18_gacha_get")
 
-[node name="UpgradeSuccessSound" type="AudioStreamPlayer" parent="."]
+[node name="UpgradeSuccessSound" type="AudioStreamPlayer" parent="." unique_id=1702926161]
 stream = ExtResource("19_upgrade_success")
 
-[node name="EnemyHitSound" type="AudioStreamPlayer" parent="."]
+[node name="EnemyHitSound" type="AudioStreamPlayer" parent="." unique_id=162137164]
 stream = ExtResource("20_enemy_hit")
 
 [node name="MainMenu" type="Control" parent="." unique_id=370771292]
@@ -239,9 +239,9 @@ alignment = 1
 [node name="BallsButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1466330119]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
 theme_override_fonts/font = ExtResource("6_acbhb")
 theme_override_font_sizes/font_size = 16
@@ -252,9 +252,9 @@ flat = true
 [node name="RerollsButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1062953387]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
 theme_override_fonts/font = ExtResource("6_acbhb")
 theme_override_font_sizes/font_size = 16
@@ -265,9 +265,9 @@ flat = true
 [node name="DamageButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1829076454]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
 theme_override_fonts/font = ExtResource("6_acbhb")
 theme_override_font_sizes/font_size = 16
@@ -278,9 +278,9 @@ flat = true
 [node name="HpButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1273698135]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
 theme_override_fonts/font = ExtResource("6_acbhb")
 theme_override_font_sizes/font_size = 16
@@ -291,9 +291,9 @@ flat = true
 [node name="MoneyButton" type="Button" parent="MainMenu/UpgradeMenu/Panel/UpgradeList" unique_id=1585206942]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.49019608, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0.1, 0.1, 0.1, 0.4)
 theme_override_fonts/font = ExtResource("6_acbhb")
 theme_override_font_sizes/font_size = 16
@@ -875,33 +875,33 @@ offset_bottom = 310.0
 scale = Vector2(0.15, 0.15)
 texture_normal = SubResource("AtlasTexture_ft73y")
 
-[connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/BackButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/UpgradeList/BallsButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/UpgradeList/RerollsButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/UpgradeList/DamageButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/UpgradeList/HpButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/UpgradeList/MoneyButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/GachaMenu/Panel/GachaContent/RerollButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/GachaMenu/Panel/BackButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/GachaMenu/Panel/ReadyButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/CreditMenu/Panel/BackButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/Panel/PlayButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/Panel/CreditsButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/Panel/UpgradeButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/NewGameButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/ContinueButton" to="." method="_play_menu_click_sound"]
-[connection signal="pressed" from="MainMenu/StartChoiceMenu/BackButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/UpgradeMenu/Panel/BackButton" to="." method="_play_menu_click_sound"]
+[connection signal="pressed" from="MainMenu/GachaMenu/Panel/GachaContent/RerollButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/GachaContent/RerollButton" to="." method="_on_reroll_pressed"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/GachaMenu/Panel/BackButton" to="." method="_play_menu_click_sound"]
+[connection signal="pressed" from="MainMenu/GachaMenu/Panel/ReadyButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/GachaMenu/Panel/ReadyButton" to="." method="_on_ready_button_pressed"]
 [connection signal="pressed" from="MainMenu/CreditMenu/Panel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/CreditMenu/Panel/BackButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="MainMenu/GamePlay/HBoxContainer/CombatUI/RetryButton" to="." method="_play_menu_click_sound"]
+[connection signal="pressed" from="MainMenu/Panel/PlayButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/Panel/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MainMenu/Panel/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="MainMenu/Panel/CreditsButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/Panel/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="MainMenu/Panel/UpgradeButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/Panel/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/NewGameButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/NewGameButton" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/ContinueButton" to="." method="_play_menu_click_sound"]
 [connection signal="pressed" from="MainMenu/StartChoiceMenu/StartChoiceContent/ContinueButton" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="MainMenu/StartChoiceMenu/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainMenu/StartChoiceMenu/BackButton" to="." method="_play_menu_click_sound"]

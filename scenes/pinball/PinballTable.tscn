@@ -95,7 +95,7 @@ scale = Vector2(0.25, 0.25)
 texture = ExtResource("10_background")
 
 [node name="BevoBall" parent="." unique_id=1291116846 instance=ExtResource("2_ball")]
-position = Vector2(535, 520)
+position = Vector2(545, 520)
 
 [node name="BallFallSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("19_ball_fall")

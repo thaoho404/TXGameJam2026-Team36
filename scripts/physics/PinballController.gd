@@ -9,7 +9,8 @@ signal ball_drained()
 enum BoardState { STOPPED, PREPARING, READY, IN_PLAY }
 
 @export var bumper_points: int = 10
-@export var spawn_position: Vector2 = Vector2(535, 520)
+# Keep the ball clear of the launch divider during a fast first physics step.
+@export var spawn_position: Vector2 = Vector2(545, 520)
 @export_range(0.0, 2.0, 0.05) var bumper_score_cooldown_seconds: float = 0.35
 @export_range(0.0, 3.0, 0.05) var wheel_score_cooldown_seconds: float = 1.0
 @export_range(0, 1000, 1) var element_strip_points: int = 25
@@ -64,6 +65,7 @@ func _ready() -> void:
 			target.valid_hit.connect(_on_target_hit)
 	randomize_bumpers()
 	plunger.ball_launched.connect(_on_plunger_ball_launched)
+	plunger.ball_rearmed.connect(_on_plunger_ball_rearmed)
 	ball.body_entered.connect(_on_ball_body_entered)
 	ball.freeze = true
 	stop_board()
@@ -91,7 +93,8 @@ func _in_launch_lane() -> bool:
 	if board_state != BoardState.IN_PLAY:
 		return false
 	var point := ball.position
-	if point.x < 505.0 or point.x > 574.0 or point.y < 160.0 or point.y > 648.0:
+	# The pocket above the gate is part of the lane too.
+	if point.x < 505.0 or point.x > 574.0 or point.y > 648.0:
 		return false
 	# A returned ball already at the plunger is ready for a normal relaunch.
 	return not (plunger._armed_ball == ball and point.y >= 480.0)
@@ -143,8 +146,6 @@ func _rescue_stuck_ball(revision: int) -> void:
 	ball.sleeping = false
 	ball.linear_velocity = Vector2.ZERO if return_to_plunger else Vector2(180, 120)
 	_reset_launch_lane_watch()
-	if return_to_plunger:
-		ball_rearmed.emit()
 
 
 func prepare_next_ball() -> void:
@@ -237,6 +238,10 @@ func _on_plunger_ball_launched() -> void:
 		return
 	board_state = BoardState.IN_PLAY
 	ball_launched.emit()
+
+
+func _on_plunger_ball_rearmed() -> void:
+	ball_rearmed.emit()
 
 
 func _on_ball_body_entered(body: Node) -> void:

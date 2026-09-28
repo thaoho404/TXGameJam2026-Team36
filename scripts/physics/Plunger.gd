@@ -2,6 +2,7 @@ class_name PinballPlunger
 extends StaticBody2D
 
 signal ball_launched()
+signal ball_rearmed()
 
 @export var max_power: float = 2000.0
 @export var minimum_power: float = 450.0
@@ -34,6 +35,7 @@ func arm_ball(next_ball: RigidBody2D) -> void:
 	# A frozen ball does not need to retrigger the chamber sensor to be served.
 	ball_in_chamber = next_ball
 	_wait_for_input_release = Input.is_action_pressed("ui_accept")
+	ball_rearmed.emit()
 
 
 func disarm() -> void:
