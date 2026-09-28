@@ -331,5 +331,25 @@ func _test_main_scene() -> void:
 		and board.board_state == PinballController.BoardState.STOPPED
 		and manager.player_hp == manager.player_max_hp,
 		"Leaving gameplay during damage resolution cancels pending retaliation")
+	var upgrade_list: VBoxContainer = main.get_node("MainMenu/UpgradeMenu/Panel/UpgradeList")
+	_check(upgrade_list.owner == main and main.currency_label.owner == main
+		and main.upgrade_buttons.size() == RunProfile.UPGRADE_KEYS.size(),
+		"Main upgrade display and five buttons are editable scene nodes")
+	main.profile.save_path = "user://pin_roulette_upgrade_scene_test_profile.json"
+	main.profile.currency = 100
+	for key in RunProfile.UPGRADE_KEYS:
+		main.profile.upgrades[key] = 0
+	main.get_node("MainMenu/Panel/UpgradeButton").pressed.emit()
+	_check(main.upgrade_screen.visible and main.currency_label.text == "Currency: 100",
+		"Main upgrade screen displays the current currency")
+	var spent := 0
+	for key in RunProfile.UPGRADE_KEYS:
+		var entry: Dictionary = main.upgrade_buttons[key]
+		var button: Button = entry.button
+		spent += main.profile.upgrade_cost(key)
+		button.pressed.emit()
+		_check(button.owner == main and main.profile.upgrades[key] == 1
+			and main.profile.currency == 100 - spent and "Lv 1" in button.text,
+			"%s scene button buys and displays its upgrade" % key)
 	main.queue_free()
 	await process_frame

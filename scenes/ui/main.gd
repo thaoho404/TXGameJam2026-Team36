@@ -3,6 +3,7 @@ extends Control
 const BOSS_2_TEXTURE: Texture2D = preload("res://art-assets/sprites/reveille_normal_sprite.png")
 
 @onready var title_screen: Control = $MainMenu/Panel
+@onready var menu_click_sound: AudioStreamPlayer = $MenuClickSound
 @onready var start_screen: Control = $MainMenu/StartChoiceMenu
 @onready var upgrade_screen: Control = $MainMenu/UpgradeMenu
 @onready var gacha_screen: Control = $MainMenu/GachaMenu
@@ -184,7 +185,13 @@ func _play_credits_roll() -> void:
 	_credits_tween.tween_property(credits_roll, "position:y", -credits_roll.size.y, credits_scroll_seconds).from(screen_height)
 
 
+func _play_menu_click_sound() -> void:
+	menu_click_sound.play()
+
+
 func _on_exit_button_pressed() -> void:
+	_play_menu_click_sound()
+	await menu_click_sound.finished
 	get_tree().quit()
 
 
