@@ -97,24 +97,24 @@ texture = ExtResource("10_background")
 [node name="BevoBall" parent="." unique_id=1291116846 instance=ExtResource("2_ball")]
 position = Vector2(545, 520)
 
-[node name="BallFallSound" type="AudioStreamPlayer" parent="."]
+[node name="BallFallSound" type="AudioStreamPlayer" parent="." unique_id=1718320978]
 stream = ExtResource("19_ball_fall")
 
-[node name="SideSpringSound" type="AudioStreamPlayer" parent="."]
+[node name="SideSpringSound" type="AudioStreamPlayer" parent="." unique_id=1619108771]
 stream = ExtResource("20_side_spring")
 max_polyphony = 4
 
-[node name="BumperHitSound" type="AudioStreamPlayer" parent="."]
+[node name="BumperHitSound" type="AudioStreamPlayer" parent="." unique_id=1902799193]
 stream = ExtResource("21_bumper_hit")
 max_polyphony = 4
 
-[node name="LeftFlipperSound" type="AudioStreamPlayer" parent="."]
+[node name="LeftFlipperSound" type="AudioStreamPlayer" parent="." unique_id=1421192402]
 stream = ExtResource("22_left_flipper")
 
-[node name="RightFlipperSound" type="AudioStreamPlayer" parent="."]
+[node name="RightFlipperSound" type="AudioStreamPlayer" parent="." unique_id=1131329933]
 stream = ExtResource("23_right_flipper")
 
-[node name="RampSound" type="AudioStreamPlayer" parent="."]
+[node name="RampSound" type="AudioStreamPlayer" parent="." unique_id=1212808523]
 stream = ExtResource("24_ramp")
 max_polyphony = 4
 
@@ -132,16 +132,16 @@ texture = ExtResource("11_normal_bumper")
 shape = SubResource("CircleShape2D_bumper")
 
 [node name="Bumper2" type="StaticBody2D" parent="Bumpers" unique_id=217969656]
-position = Vector2(431, 244)
+position = Vector2(409, 207)
 physics_material_override = SubResource("PhysicsMaterial_bumper")
 
 [node name="Sprite2D" type="Sprite2D" parent="Bumpers/Bumper2" unique_id=1965554465]
-position = Vector2(1, 7)
+position = Vector2(-4, 1)
 scale = Vector2(0.04, 0.04)
 texture = ExtResource("12_fire_bumper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/Bumper2" unique_id=111379720]
-position = Vector2(3, 6)
+position = Vector2(-2, 0)
 shape = SubResource("CircleShape2D_bumper")
 
 [node name="Bumper3" type="StaticBody2D" parent="Bumpers" unique_id=735390005]
@@ -257,10 +257,10 @@ offset_right = 18.0
 offset_bottom = -6.0
 color = Color(0.7, 0.7, 0.7, 1)
 
-[node name="ChargeSound" type="AudioStreamPlayer" parent="Plunger"]
+[node name="ChargeSound" type="AudioStreamPlayer" parent="Plunger" unique_id=1468916454]
 stream = ExtResource("25_charge")
 
-[node name="ReleaseSound" type="AudioStreamPlayer" parent="Plunger"]
+[node name="ReleaseSound" type="AudioStreamPlayer" parent="Plunger" unique_id=2068110097]
 stream = ExtResource("26_release")
 
 [node name="Chamber" type="Area2D" parent="Plunger" unique_id=1938297574]
@@ -632,10 +632,10 @@ shape = SubResource("RectangleShape2D_wind_exit")
 
 [connection signal="body_entered" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_entered"]
 [connection signal="body_exited" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_exited"]
-[connection signal="body_entered" from="LeftSpringBumper/Trigger" to="LeftSpringBumper" method="_on_trigger_body_entered"]
 [connection signal="kicked" from="LeftSpringBumper" to="." method="_on_spring_bumper_kicked"]
-[connection signal="body_entered" from="RightSpringBumper/Trigger" to="RightSpringBumper" method="_on_trigger_body_entered"]
+[connection signal="body_entered" from="LeftSpringBumper/Trigger" to="LeftSpringBumper" method="_on_trigger_body_entered"]
 [connection signal="kicked" from="RightSpringBumper" to="." method="_on_spring_bumper_kicked"]
+[connection signal="body_entered" from="RightSpringBumper/Trigger" to="RightSpringBumper" method="_on_trigger_body_entered"]
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
 [connection signal="score_tick" from="BallTrap" to="." method="_on_ball_trap_score_tick"]
 [connection signal="body_entered" from="RightIceRamp/IceArea" to="RightIceRamp/IceArea" method="_on_body_entered"]
@@ -644,7 +644,7 @@ shape = SubResource("RectangleShape2D_wind_exit")
 [connection signal="body_entered" from="ElementStrips/Strip1" to="ElementStrips" method="_on_strip_body_entered"]
 [connection signal="body_entered" from="ElementStrips/Strip2" to="ElementStrips" method="_on_strip_body_entered"]
 [connection signal="body_entered" from="ElementStrips/Strip3" to="ElementStrips" method="_on_strip_body_entered"]
+[connection signal="ramp_entered" from="RampSystem/WindRamp/RampEntrance" to="." method="_on_ramp_entered"]
 [connection signal="body_entered" from="RampSystem/WindRamp/RampEntrance/FrontSensor" to="RampSystem/WindRamp/RampEntrance" method="_on_front_sensor_body_entered"]
 [connection signal="body_entered" from="RampSystem/WindRamp/RampEntrance/CommitSensor" to="RampSystem/WindRamp/RampEntrance" method="_on_commit_sensor_body_entered"]
-[connection signal="ramp_entered" from="RampSystem/WindRamp/RampEntrance" to="." method="_on_ramp_entered"]
 [connection signal="body_entered" from="RampSystem/WindRamp/RampExit" to="RampSystem/WindRamp/RampExit" method="_on_body_entered"]
