@@ -1,7 +1,21 @@
 class_name GachaRoller
 extends RefCounted
 
-const TYPE_DIR := "res://resources/ball_types/"
+# Keep the roster as resource references so exported builds include and load every type.
+const BALL_TYPES := [
+	preload("res://resources/ball_types/normal.tres"),
+	preload("res://resources/ball_types/water.tres"),
+	preload("res://resources/ball_types/grass.tres"),
+	preload("res://resources/ball_types/fire.tres"),
+	preload("res://resources/ball_types/earth.tres"),
+	preload("res://resources/ball_types/ice.tres"),
+	preload("res://resources/ball_types/wind.tres"),
+	preload("res://resources/ball_types/electric.tres"),
+	preload("res://resources/ball_types/steel.tres"),
+	preload("res://resources/ball_types/fairy.tres"),
+	preload("res://resources/ball_types/dark.tres"),
+	preload("res://resources/ball_types/gold.tres"),
+]
 const RARITIES := [
 	BallType.Rarity.COMMON,
 	BallType.Rarity.UNCOMMON,
@@ -22,21 +36,14 @@ func _init() -> void:
 
 func load_types() -> bool:
 	types_by_rarity.clear()
-	var directory := DirAccess.open(TYPE_DIR)
-	if directory == null:
-		push_error("Ball type resources are missing: " + TYPE_DIR)
-		return false
-	directory.list_dir_begin()
-	var file_name := directory.get_next()
-	while file_name != "":
-		if file_name.ends_with(".tres"):
-			var ball_type := load(TYPE_DIR + file_name) as BallType
-			if ball_type != null:
-				if not types_by_rarity.has(ball_type.rarity):
-					types_by_rarity[ball_type.rarity] = []
-				types_by_rarity[ball_type.rarity].append(ball_type)
-		file_name = directory.get_next()
-	directory.list_dir_end()
+	for resource in BALL_TYPES:
+		var ball_type := resource as BallType
+		if ball_type == null:
+			push_error("Ball type roster contains an invalid resource")
+			return false
+		if not types_by_rarity.has(ball_type.rarity):
+			types_by_rarity[ball_type.rarity] = []
+		types_by_rarity[ball_type.rarity].append(ball_type)
 	for rarity in RARITIES:
 		if not types_by_rarity.has(rarity):
 			push_error("No ball type resource for rarity %d" % rarity)
