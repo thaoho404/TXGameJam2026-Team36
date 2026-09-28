@@ -23,6 +23,9 @@
 [ext_resource type="Texture2D" uid="uid://bp11fi212ldbc" path="res://art-assets/background/Upgrade Background.png" id="15_upgradebg"]
 [ext_resource type="Texture2D" uid="uid://cig2gvf2dh0l3" path="res://art-assets/sprites/bevo_laying_tv_idle.PNG" id="16_bevo_idle"]
 [ext_resource type="AudioStream" uid="uid://laetpxgv483x" path="res://audio/sfx_pointtick.wav" id="17_menu_click"]
+[ext_resource type="AudioStream" uid="uid://bgd1am3vsrhsk" path="res://audio/sfx_gacha-get.wav" id="18_gacha_get"]
+[ext_resource type="AudioStream" uid="uid://d0e8fncigpomq" path="res://audio/sfx_got-enough-points-for-pull-notif.wav" id="19_upgrade_success"]
+[ext_resource type="AudioStream" uid="uid://dnm7y18ubrn7g" path="res://audio/sfx_hurtsound-earth.wav" id="20_enemy_hit"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft73y"]
 atlas = ExtResource("2_thnqr")
@@ -107,6 +110,15 @@ script = ExtResource("2_turn_manager")
 
 [node name="MenuClickSound" type="AudioStreamPlayer" parent="." unique_id=1238637437]
 stream = ExtResource("17_menu_click")
+
+[node name="GachaGetSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("18_gacha_get")
+
+[node name="UpgradeSuccessSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_upgrade_success")
+
+[node name="EnemyHitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_enemy_hit")
 
 [node name="MainMenu" type="Control" parent="." unique_id=370771292]
 layout_mode = 1

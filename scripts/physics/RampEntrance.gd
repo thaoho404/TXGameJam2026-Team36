@@ -1,5 +1,7 @@
 extends Node2D
 
+signal ramp_entered()
+
 @export var entrance_boost: float = 350.0
 @export var ramp_direction: Vector2 = Vector2.UP
 @export var minimum_entry_speed: float = 50.0
@@ -59,6 +61,7 @@ func _on_commit_sensor_body_entered(body: Node2D) -> void:
 	body.set_collision_mask_value(2, true)
 	body.continuous_cd = RigidBody2D.CCD_MODE_CAST_SHAPE
 	body.apply_central_impulse(direction * entrance_boost)
+	ramp_entered.emit()
 
 func _is_playfield_ball(body: Node2D) -> bool:
 	return (

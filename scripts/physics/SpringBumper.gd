@@ -1,5 +1,7 @@
 extends StaticBody2D
 
+signal kicked()
+
 @export var kick_direction: Vector2 = Vector2.RIGHT
 @export_range(0.0, 2000.0, 50.0) var kick_strength: float = 850.0
 @export_range(0.0, 1.0, 0.01) var cooldown_seconds: float = 0.12
@@ -20,3 +22,4 @@ func _on_trigger_body_entered(body: Node2D) -> void:
 		return
 	_last_kick_ms = now_ms
 	body.apply_central_impulse(direction * kick_strength)
+	kicked.emit()

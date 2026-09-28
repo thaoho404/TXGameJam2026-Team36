@@ -4,6 +4,9 @@ const BOSS_2_TEXTURE: Texture2D = preload("res://art-assets/sprites/reveille_nor
 
 @onready var title_screen: Control = $MainMenu/Panel
 @onready var menu_click_sound: AudioStreamPlayer = $MenuClickSound
+@onready var gacha_get_sound: AudioStreamPlayer = $GachaGetSound
+@onready var upgrade_success_sound: AudioStreamPlayer = $UpgradeSuccessSound
+@onready var enemy_hit_sound: AudioStreamPlayer = $EnemyHitSound
 @onready var start_screen: Control = $MainMenu/StartChoiceMenu
 @onready var upgrade_screen: Control = $MainMenu/UpgradeMenu
 @onready var gacha_screen: Control = $MainMenu/GachaMenu
@@ -131,6 +134,7 @@ func _refresh_gacha() -> void:
 
 func _on_reroll_pressed() -> void:
 	if profile.reroll():
+		gacha_get_sound.play()
 		_refresh_gacha()
 
 
@@ -150,7 +154,8 @@ func _refresh_upgrades() -> void:
 
 
 func _on_upgrade_pressed(key: String) -> void:
-	profile.buy_upgrade(key)
+	if profile.buy_upgrade(key):
+		upgrade_success_sound.play()
 	_refresh_upgrades()
 
 
@@ -238,6 +243,8 @@ func _advance_boss_after_pause(revision: int) -> void:
 func _on_battle_state_changed(state: TurnManager.BattleState) -> void:
 	if state != TurnManager.BattleState.PREP and state != TurnManager.BattleState.BALL_IN_PLAY:
 		pinball_table.stop_board()
+	if state == TurnManager.BattleState.ENEMY_PHASE and turn_manager.last_enemy_damage > 0:
+		enemy_hit_sound.play()
 
 
 func _update_battle_ui() -> void:

@@ -17,6 +17,14 @@
 [ext_resource type="Script" uid="uid://bywwtb3dn7jsg" path="res://scripts/physics/IceRamp.gd" id="16_ice_ramp"]
 [ext_resource type="Script" uid="uid://bpqwbha73xu3k" path="res://scripts/physics/ElementStripBank.gd" id="17_element_strips"]
 [ext_resource type="Script" uid="uid://bud1sgxgw11t1" path="res://scripts/physics/RampConveyor.gd" id="18_ramp_conveyor"]
+[ext_resource type="AudioStream" uid="uid://bqlvs37nuuwwm" path="res://audio/sfx_ball-fall.wav" id="19_ball_fall"]
+[ext_resource type="AudioStream" uid="uid://cu8ndtvwa1b01" path="res://audio/sfx_equip-element.wav" id="20_side_spring"]
+[ext_resource type="AudioStream" uid="uid://c78wb2wklchdp" path="res://audio/sfx_bumperhit.wav" id="21_bumper_hit"]
+[ext_resource type="AudioStream" uid="uid://bple3wjmsfogw" path="res://audio/sfx_flipper-down.wav" id="22_left_flipper"]
+[ext_resource type="AudioStream" uid="uid://bll5ybb43t5ot" path="res://audio/sfx_flipper-up.wav" id="23_right_flipper"]
+[ext_resource type="AudioStream" uid="uid://0rulbklxp5t4" path="res://audio/sfx_ramp-airburst.wav" id="24_ramp"]
+[ext_resource type="AudioStream" uid="uid://bs48ehkaejcov" path="res://audio/sfx_striker-compress.wav" id="25_charge"]
+[ext_resource type="AudioStream" uid="uid://br5a3ngko0g0m" path="res://audio/sfx_striker-release.wav" id="26_release"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bumper"]
 bounce = 1.6
@@ -88,6 +96,27 @@ texture = ExtResource("10_background")
 
 [node name="BevoBall" parent="." unique_id=1291116846 instance=ExtResource("2_ball")]
 position = Vector2(535, 520)
+
+[node name="BallFallSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_ball_fall")
+
+[node name="SideSpringSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_side_spring")
+max_polyphony = 4
+
+[node name="BumperHitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("21_bumper_hit")
+max_polyphony = 4
+
+[node name="LeftFlipperSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("22_left_flipper")
+
+[node name="RightFlipperSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("23_right_flipper")
+
+[node name="RampSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("24_ramp")
+max_polyphony = 4
 
 [node name="Bumpers" type="Node2D" parent="." unique_id=1194494422]
 
@@ -227,6 +256,12 @@ offset_top = -56.0
 offset_right = 18.0
 offset_bottom = -6.0
 color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="ChargeSound" type="AudioStreamPlayer" parent="Plunger"]
+stream = ExtResource("25_charge")
+
+[node name="ReleaseSound" type="AudioStreamPlayer" parent="Plunger"]
+stream = ExtResource("26_release")
 
 [node name="Chamber" type="Area2D" parent="Plunger" unique_id=1938297574]
 position = Vector2(-4, -47)
@@ -598,14 +633,18 @@ shape = SubResource("RectangleShape2D_wind_exit")
 [connection signal="body_entered" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_entered"]
 [connection signal="body_exited" from="Plunger/Chamber" to="Plunger" method="_on_chamber_body_exited"]
 [connection signal="body_entered" from="LeftSpringBumper/Trigger" to="LeftSpringBumper" method="_on_trigger_body_entered"]
+[connection signal="kicked" from="LeftSpringBumper" to="." method="_on_spring_bumper_kicked"]
 [connection signal="body_entered" from="RightSpringBumper/Trigger" to="RightSpringBumper" method="_on_trigger_body_entered"]
+[connection signal="kicked" from="RightSpringBumper" to="." method="_on_spring_bumper_kicked"]
 [connection signal="body_entered" from="DrainZone" to="." method="_on_drain_zone_body_entered"]
 [connection signal="score_tick" from="BallTrap" to="." method="_on_ball_trap_score_tick"]
 [connection signal="body_entered" from="RightIceRamp/IceArea" to="RightIceRamp/IceArea" method="_on_body_entered"]
+[connection signal="ramp_entered" from="RightIceRamp/IceArea" to="." method="_on_ramp_entered"]
 [connection signal="element_triggered" from="ElementStrips" to="." method="_on_element_strips_triggered"]
 [connection signal="body_entered" from="ElementStrips/Strip1" to="ElementStrips" method="_on_strip_body_entered"]
 [connection signal="body_entered" from="ElementStrips/Strip2" to="ElementStrips" method="_on_strip_body_entered"]
 [connection signal="body_entered" from="ElementStrips/Strip3" to="ElementStrips" method="_on_strip_body_entered"]
 [connection signal="body_entered" from="RampSystem/WindRamp/RampEntrance/FrontSensor" to="RampSystem/WindRamp/RampEntrance" method="_on_front_sensor_body_entered"]
 [connection signal="body_entered" from="RampSystem/WindRamp/RampEntrance/CommitSensor" to="RampSystem/WindRamp/RampEntrance" method="_on_commit_sensor_body_entered"]
+[connection signal="ramp_entered" from="RampSystem/WindRamp/RampEntrance" to="." method="_on_ramp_entered"]
 [connection signal="body_entered" from="RampSystem/WindRamp/RampExit" to="RampSystem/WindRamp/RampExit" method="_on_body_entered"]

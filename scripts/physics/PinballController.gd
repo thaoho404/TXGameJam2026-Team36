@@ -24,6 +24,12 @@ enum BoardState { STOPPED, PREPARING, READY, IN_PLAY }
 @onready var ball_sprite: Sprite2D = $BevoBall/Sprite2D
 @onready var ball_trap = $BallTrap
 @onready var element_strips = $ElementStrips
+@onready var ball_fall_sound: AudioStreamPlayer = $BallFallSound
+@onready var spring_sound: AudioStreamPlayer = $SideSpringSound
+@onready var bumper_sound: AudioStreamPlayer = $BumperHitSound
+@onready var left_flipper_sound: AudioStreamPlayer = $LeftFlipperSound
+@onready var right_flipper_sound: AudioStreamPlayer = $RightFlipperSound
+@onready var ramp_sound: AudioStreamPlayer = $RampSound
 
 var board_state: BoardState = BoardState.STOPPED
 var _request_revision: int = 0
@@ -67,11 +73,15 @@ func _physics_process(delta: float) -> void:
 	var controls_enabled := board_state == BoardState.READY or board_state == BoardState.IN_PLAY
 	if controls_enabled and Input.is_action_pressed("ui_left"):
 		left_flipper.rotation = move_toward(left_flipper.rotation, LEFT_ACTIVE_ANGLE, 35 * delta)
+		if Input.is_action_just_pressed("ui_left"):
+			left_flipper_sound.play()
 	else:
 		left_flipper.rotation = move_toward(left_flipper.rotation, LEFT_REST_ANGLE, 20 * delta)
 
 	if controls_enabled and Input.is_action_pressed("ui_right"):
 		right_flipper.rotation = move_toward(right_flipper.rotation, RIGHT_ACTIVE_ANGLE, 35 * delta)
+		if Input.is_action_just_pressed("ui_right"):
+			right_flipper_sound.play()
 	else:
 		right_flipper.rotation = move_toward(right_flipper.rotation, RIGHT_REST_ANGLE, 20 * delta)
 	_watch_launch_lane(delta)
@@ -232,6 +242,7 @@ func _on_plunger_ball_launched() -> void:
 func _on_ball_body_entered(body: Node) -> void:
 	if board_state != BoardState.IN_PLAY or body.get_parent() != $Bumpers:
 		return
+	bumper_sound.play()
 	var now_ms := Time.get_ticks_msec()
 	var bumper_id := body.get_instance_id()
 	var last_score_ms: int = _last_bumper_score_ms.get(bumper_id, -1000000)
@@ -260,7 +271,18 @@ func _on_drain_zone_body_entered(body: Node2D) -> void:
 		return
 	# Close scoring and input before notifying combat; freeze outside the callback.
 	stop_board()
+	ball_fall_sound.play()
 	ball_drained.emit()
+
+
+func _on_spring_bumper_kicked() -> void:
+	if board_state == BoardState.IN_PLAY:
+		spring_sound.play()
+
+
+func _on_ramp_entered() -> void:
+	if board_state == BoardState.IN_PLAY:
+		ramp_sound.play()
 
 
 func _on_ball_trap_score_tick(points: int) -> void:

@@ -1,6 +1,8 @@
 class_name IceRamp
 extends Area2D
 
+signal ramp_entered()
+
 @export_range(0.1, 1.0, 0.05) var entry_speed_multiplier: float = 0.68
 @export_range(0.0, 2000.0, 25.0) var minimum_exit_speed: float = 350.0
 @export_range(0.0, 1.0, 0.05) var guide_amount: float = 0.6
@@ -16,3 +18,4 @@ func _on_body_entered(body: Node2D) -> void:
 	if current_direction == Vector2.ZERO:
 		current_direction = ramp_direction
 	body.linear_velocity = current_direction.lerp(ramp_direction, guide_amount).normalized() * slowed_speed
+	ramp_entered.emit()

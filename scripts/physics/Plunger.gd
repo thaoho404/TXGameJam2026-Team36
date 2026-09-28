@@ -19,6 +19,8 @@ var launch_multiplier: float = 1.0
 
 @onready var visual_stick: ColorRect = $VisualBlock
 @onready var start_y: float = visual_stick.position.y
+@onready var charge_sound: AudioStreamPlayer = $ChargeSound
+@onready var release_sound: AudioStreamPlayer = $ReleaseSound
 
 
 func _ready() -> void:
@@ -63,6 +65,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		is_charging = true
 		current_power = 0.0
+		charge_sound.play()
 
 	if Input.is_action_pressed("ui_accept") and is_charging:
 		current_power = move_toward(current_power, maxf(0.0, max_power), charge_rate * delta)
@@ -90,6 +93,7 @@ func request_launch(power: float) -> bool:
 	launched_ball.freeze = false
 	launched_ball.sleeping = false
 	launched_ball.apply_central_impulse(Vector2.UP * launch_power * launch_multiplier)
+	release_sound.play()
 	ball_launched.emit()
 	return true
 
@@ -98,6 +102,7 @@ func _reset_charge() -> void:
 	is_charging = false
 	current_power = 0.0
 	visual_stick.position.y = start_y
+	charge_sound.stop()
 
 
 func _on_chamber_body_entered(body: Node2D) -> void:
