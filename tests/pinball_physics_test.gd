@@ -87,7 +87,7 @@ func _run() -> void:
 		board.ball.collision_mask = 1
 		board.ball.freeze = false
 		board.ball.linear_velocity = spring_check[2]
-		for frame in range(3):
+		for frame in range(6):
 			await physics_frame
 		_check(int(spring.get("_last_kick_ms")) > 0
 			and board.ball.linear_velocity.dot(spring.kick_direction) > 0.0,

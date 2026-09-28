@@ -60,6 +60,10 @@ bounce = 1.6
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_spring"]
 bounce = 1.0
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yellow_border"]
+friction = 0.0
+bounce = 1.0
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bottom_guard"]
 friction = 0.0
 bounce = 0.2
@@ -402,6 +406,20 @@ collision_layer = 0
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightSpringBumper/Trigger" unique_id=725569122]
 position = Vector2(51, -31)
 polygon = PackedVector2Array(417, 412, 406, 465, 396, 512, 385, 527, 390.92557, 490.26147, 395, 465, 411, 398)
+
+[node name="LeftYellowBorder" type="StaticBody2D" parent="." unique_id=525156951]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_yellow_border")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LeftYellowBorder" unique_id=1197956861]
+polygon = PackedVector2Array(45, 510, 148, 550, 148, 562, 45, 522)
+
+[node name="RightYellowBorder" type="StaticBody2D" parent="." unique_id=63889232]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_yellow_border")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightYellowBorder" unique_id=1973123590]
+polygon = PackedVector2Array(385, 550, 480, 510, 480, 522, 385, 562)
 
 [node name="LeftBottomGuard" type="StaticBody2D" parent="." unique_id=1842662332]
 collision_layer = 3

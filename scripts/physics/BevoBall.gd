@@ -14,7 +14,7 @@ var _last_wheel_name: StringName = &""
 var _wheel_pocket_hits: int = 0
 var _stall_elapsed: float = 0.0
 var _roof_points := PackedVector2Array()
-var _ball_radius: float = 25.0
+var _ball_radius: float = 17.5
 
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
