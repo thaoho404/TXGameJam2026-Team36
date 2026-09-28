@@ -14,6 +14,7 @@ Run the physical serve and gate regression separately:
 & 'C:\Users\icese\OneDrive\Documents\Godot.exe.exe' --headless --path . --script res://tests/wheel_collision_test.gd
 & 'C:\Users\icese\OneDrive\Documents\Godot.exe.exe' --headless --path . --script res://tests/ceiling_regression_test.gd
 & 'C:\Users\icese\OneDrive\Documents\Godot.exe.exe' --headless --path . --script res://tests/launch_lane_recovery_test.gd
+& 'C:\Users\icese\OneDrive\Documents\Godot.exe.exe' --headless --path . --script res://tests/bottom_side_floor_test.gd
 ```
 
 Run the elemental chart, ball resource, and run progression checks:
@@ -23,7 +24,7 @@ Run the elemental chart, ball resource, and run progression checks:
 & 'C:\Users\icese\OneDrive\Documents\Godot.exe.exe' --headless --path . --script res://tests/run_system_test.gd
 ```
 
-The physical checks cover both neutral side springs, wheel side reflections and center-gap escape, high-speed rebounds against the roof on both collision layers, launch-lane stall recovery without consuming another ball, and a drop target waiting for the ball to leave before its wall returns.
+The physical checks cover both neutral side springs, wheel side reflections and center-gap escape, high-speed rebounds against the roof on both collision layers, launch-lane stall recovery without consuming another ball, lower side guards with an open center drain, and a drop target waiting for the ball to leave before its wall returns.
 
 If testing a fresh checkout, first open the project in Godot to import its assets and register the named scripts. Alternatively, run the same executable with `--headless --editor --path . --quit` before the test command.
 

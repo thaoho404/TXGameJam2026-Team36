@@ -33,7 +33,7 @@ bounce = 1.6
 radius = 24.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wheel_bumper"]
-radius = 48.0
+radius = 39.012817
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flipper"]
 size = Vector2(115, 24)
@@ -59,6 +59,10 @@ bounce = 1.6
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_spring"]
 bounce = 1.0
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bottom_guard"]
+friction = 0.0
+bounce = 0.2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_drain"]
 size = Vector2(800, 50)
@@ -169,10 +173,11 @@ position = Vector2(4, 7)
 shape = SubResource("CircleShape2D_bumper")
 
 [node name="BumperWheelLeft" type="StaticBody2D" parent="Bumpers" unique_id=1245433421]
-position = Vector2(186, 485)
+position = Vector2(183, 486)
 physics_material_override = SubResource("PhysicsMaterial_bumper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/BumperWheelLeft" unique_id=1172107108]
+position = Vector2(2, -3)
 shape = SubResource("CircleShape2D_wheel_bumper")
 
 [node name="BumperWheelRight" type="StaticBody2D" parent="Bumpers" unique_id=1119763370]
@@ -180,6 +185,7 @@ position = Vector2(359, 485)
 physics_material_override = SubResource("PhysicsMaterial_bumper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bumpers/BumperWheelRight" unique_id=1635051596]
+position = Vector2(-22, -4)
 shape = SubResource("CircleShape2D_wheel_bumper")
 
 [node name="Flippers" type="Node2D" parent="." unique_id=1755207357]
@@ -330,7 +336,7 @@ position = Vector2(-45, 0)
 physics_material_override = SubResource("PhysicsMaterial_6q13x")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=1600816620]
-position = Vector2(32, -52)
+position = Vector2(42, -52)
 polygon = PackedVector2Array(498, 491, 472, 413, 457, 478, 448, 544)
 
 [node name="Visual" type="Polygon2D" parent="StaticEnvironment/RightSlingshot" unique_id=95379997]
@@ -386,7 +392,7 @@ script = ExtResource("10_spring")
 kick_direction = Vector2(-0.93, -0.37)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightSpringBumper" unique_id=1674545862]
-position = Vector2(168.21472, 18.397705)
+position = Vector2(174, 15)
 scale = Vector2(0.6725744, 0.8782894)
 polygon = PackedVector2Array(432.34662, 401.46478, 444.2412, 417.40485, 433, 471, 397, 546, 391, 545, 390, 502, 411.53107, 429.9292)
 
@@ -394,8 +400,22 @@ polygon = PackedVector2Array(432.34662, 401.46478, 444.2412, 417.40485, 433, 471
 collision_layer = 0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightSpringBumper/Trigger" unique_id=725569122]
-position = Vector2(46, -36)
-polygon = PackedVector2Array(417, 412, 406, 465, 396, 512, 385, 527, 395, 465, 411, 398)
+position = Vector2(51, -31)
+polygon = PackedVector2Array(417, 412, 406, 465, 396, 512, 385, 527, 390.92557, 490.26147, 395, 465, 411, 398)
+
+[node name="LeftBottomGuard" type="StaticBody2D" parent="." unique_id=1842662332]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_bottom_guard")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LeftBottomGuard" unique_id=118732871]
+polygon = PackedVector2Array(0, 570, 195, 625, 195, 760, 0, 760)
+
+[node name="RightBottomGuard" type="StaticBody2D" parent="." unique_id=1753198320]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_bottom_guard")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RightBottomGuard" unique_id=90445388]
+polygon = PackedVector2Array(350, 625, 574, 570, 574, 760, 350, 760)
 
 [node name="DrainZone" type="Area2D" parent="." unique_id=1249235281]
 position = Vector2(250, 670)

@@ -16,6 +16,8 @@ enum BoardState { STOPPED, PREPARING, READY, IN_PLAY }
 @export_range(0, 1000, 1) var element_strip_points: int = 25
 @export_range(0.25, 10.0, 0.25) var launch_lane_stall_seconds: float = 2.0
 @export_range(1.0, 20.0, 0.5) var launch_lane_max_seconds: float = 6.0
+@export_range(0.5, 6.0, 0.25) var launch_exit_max_seconds: float = 1.5
+@export_range(0.5, 6.0, 0.25) var bottom_side_max_seconds: float = 2.0
 @export var launch_lane_rescue_position: Vector2 = Vector2(250, 245)
 
 @onready var left_flipper: AnimatableBody2D = $Flippers/LeftFlipper
@@ -44,13 +46,20 @@ var _last_speed_multiplier: float = 1.0
 var _rng := RandomNumberGenerator.new()
 var _launch_lane_anchor: Vector2 = Vector2.ZERO
 var _launch_lane_time: float = 0.0
+var _launch_exit_time: float = 0.0
 var _still_time: float = 0.0
 var _rescue_pending: bool = false
+var _bottom_side_time: float = 0.0
+var _bottom_rescue_pending: bool = false
 
 const LEFT_REST_ANGLE := deg_to_rad(18.0)
 const LEFT_ACTIVE_ANGLE := deg_to_rad(-28.0)
 const RIGHT_REST_ANGLE := deg_to_rad(-18.0)
 const RIGHT_ACTIVE_ANGLE := deg_to_rad(28.0)
+const LAUNCH_EXIT_LEFT := 470.0
+const LAUNCH_LANE_LEFT := 505.0
+const LAUNCH_LANE_RIGHT := 574.0
+const LAUNCH_EXIT_BOTTOM := 220.0
 const BUMPER_ELEMENTS := [BevoData.ElementType.NORMAL, BevoData.ElementType.WATER, BevoData.ElementType.GRASS, BevoData.ElementType.FIRE, BevoData.ElementType.EARTH, BevoData.ElementType.ICE, BevoData.ElementType.WIND, BevoData.ElementType.ELECTRIC, BevoData.ElementType.STEEL, BevoData.ElementType.FAIRY, BevoData.ElementType.DARK]
 const TARGET_ELEMENTS := [BevoData.ElementType.PSYCHIC, BevoData.ElementType.GHOST, BevoData.ElementType.NORMAL, BevoData.ElementType.WATER, BevoData.ElementType.GRASS, BevoData.ElementType.FIRE, BevoData.ElementType.EARTH, BevoData.ElementType.ICE, BevoData.ElementType.WIND, BevoData.ElementType.ELECTRIC, BevoData.ElementType.STEEL, BevoData.ElementType.FAIRY, BevoData.ElementType.DARK]
 
@@ -87,17 +96,23 @@ func _physics_process(delta: float) -> void:
 	else:
 		right_flipper.rotation = move_toward(right_flipper.rotation, RIGHT_REST_ANGLE, 20 * delta)
 	_watch_launch_lane(delta)
+	_watch_bottom_sides(delta)
 
 
 func _in_launch_lane() -> bool:
 	if board_state != BoardState.IN_PLAY:
 		return false
 	var point := ball.position
-	# The pocket above the gate is part of the lane too.
-	if point.x < 505.0 or point.x > 574.0 or point.y > 648.0:
+	var in_shaft := point.x >= LAUNCH_LANE_LEFT and point.x <= LAUNCH_LANE_RIGHT and point.y <= 648.0
+	if not in_shaft and not _in_launch_exit():
 		return false
 	# A returned ball already at the plunger is ready for a normal relaunch.
 	return not (plunger._armed_ball == ball and point.y >= 480.0)
+
+
+func _in_launch_exit() -> bool:
+	var point := ball.position
+	return point.x >= LAUNCH_EXIT_LEFT and point.x <= LAUNCH_LANE_RIGHT and point.y <= LAUNCH_EXIT_BOTTOM
 
 
 func _watch_launch_lane(delta: float) -> void:
@@ -107,20 +122,58 @@ func _watch_launch_lane(delta: float) -> void:
 	if _launch_lane_time == 0.0:
 		_launch_lane_anchor = ball.position
 	_launch_lane_time += delta
+	_launch_exit_time = _launch_exit_time + delta if _in_launch_exit() else 0.0
 	if ball.position.distance_to(_launch_lane_anchor) >= 30.0:
 		_launch_lane_anchor = ball.position
 		_still_time = 0.0
 	else:
 		_still_time += delta
-	if not _rescue_pending and (_still_time >= launch_lane_stall_seconds or _launch_lane_time >= launch_lane_max_seconds):
+	if not _rescue_pending and (
+		_still_time >= launch_lane_stall_seconds
+		or _launch_lane_time >= launch_lane_max_seconds
+		or _launch_exit_time >= launch_exit_max_seconds
+	):
 		_rescue_pending = true
 		_rescue_stuck_ball.call_deferred(_request_revision)
 
 
 func _reset_launch_lane_watch() -> void:
 	_launch_lane_time = 0.0
+	_launch_exit_time = 0.0
 	_still_time = 0.0
 	_rescue_pending = false
+
+
+func _in_bottom_side() -> bool:
+	if board_state != BoardState.IN_PLAY or ball.freeze:
+		return false
+	var point := ball.position
+	# A flipper can pin the ball against a lower guard; only watch outside the center drain.
+	return point.y >= 500.0 and (point.x < 175.0 or (point.x > 400.0 and point.x < LAUNCH_LANE_LEFT))
+
+
+func _watch_bottom_sides(delta: float) -> void:
+	if not _in_bottom_side():
+		_reset_bottom_side_watch()
+		return
+	_bottom_side_time += delta
+	if not _bottom_rescue_pending and _bottom_side_time >= bottom_side_max_seconds:
+		_bottom_rescue_pending = true
+		_rescue_bottom_side.call_deferred(_request_revision)
+
+
+func _reset_bottom_side_watch() -> void:
+	_bottom_side_time = 0.0
+	_bottom_rescue_pending = false
+
+
+func _rescue_bottom_side(revision: int) -> void:
+	if revision != _request_revision or not _in_bottom_side():
+		_reset_bottom_side_watch()
+		return
+	_move_ball_out_of_trap(false)
+	_reset_bottom_side_watch()
+	_reset_launch_lane_watch()
 
 
 func _rescue_stuck_ball(revision: int) -> void:
@@ -128,6 +181,12 @@ func _rescue_stuck_ball(revision: int) -> void:
 		_reset_launch_lane_watch()
 		return
 	var return_to_plunger := ball.position.y >= 450.0
+	_move_ball_out_of_trap(return_to_plunger)
+	_reset_launch_lane_watch()
+	_reset_bottom_side_watch()
+
+
+func _move_ball_out_of_trap(return_to_plunger: bool) -> void:
 	ball.freeze = true
 	ball.linear_velocity = Vector2.ZERO
 	ball.angular_velocity = 0.0
@@ -145,12 +204,12 @@ func _rescue_stuck_ball(revision: int) -> void:
 	ball.freeze = false
 	ball.sleeping = false
 	ball.linear_velocity = Vector2.ZERO if return_to_plunger else Vector2(180, 120)
-	_reset_launch_lane_watch()
 
 
 func prepare_next_ball() -> void:
 	_request_revision += 1
 	_reset_launch_lane_watch()
+	_reset_bottom_side_watch()
 	board_state = BoardState.PREPARING
 	plunger.disarm()
 	_apply_preparation.call_deferred(_request_revision)
@@ -191,6 +250,7 @@ func apply_speed_multiplier(multiplier: float) -> void:
 func stop_board() -> void:
 	_request_revision += 1
 	_reset_launch_lane_watch()
+	_reset_bottom_side_watch()
 	board_state = BoardState.STOPPED
 	plunger.disarm()
 	ball_trap.reset_trap()

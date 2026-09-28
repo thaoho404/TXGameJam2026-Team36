@@ -49,6 +49,11 @@ func _run() -> void:
 	_check(board.ball.position.distance_to(board.launch_lane_rescue_position) < 80.0,
 		"Ball trapped above the launch gate returns to the playfield")
 
+	_place_stuck_ball(board, Vector2(490, 155))
+	await create_timer(0.3).timeout
+	_check(board.ball.position.distance_to(board.launch_lane_rescue_position) < 80.0,
+		"Ball wedged beside the launch exit returns to the playfield")
+
 	_place_stuck_ball(board, Vector2(535, 300))
 	await create_timer(0.3).timeout
 	_check(board.ball.position.distance_to(board.launch_lane_rescue_position) < 80.0
@@ -69,6 +74,22 @@ func _run() -> void:
 	_check(board.plunger.request_launch(1000.0) and manager.balls_left == stock and manager.turn_number == turn,
 		"Relaunching the rescued ball does not spend a second inventory ball")
 	main.queue_free()
+	await process_frame
+
+	var slow_board: PinballController = load("res://scenes/pinball/PinballTable.tscn").instantiate()
+	root.add_child(slow_board)
+	slow_board.prepare_next_ball()
+	await physics_frame
+	await physics_frame
+	_check(slow_board.plunger.request_launch(925.0), "Borderline launch leaves the plunger")
+	var reached_playfield := false
+	for frame in range(210):
+		await physics_frame
+		if slow_board.ball.position.x < 470.0 and slow_board.ball.position.y < 300.0:
+			reached_playfield = true
+			break
+	_check(reached_playfield, "Borderline launch cannot bounce indefinitely in the exit pocket")
+	slow_board.queue_free()
 	await process_frame
 	print("Launch lane recovery: %d failure(s)." % failures)
 	quit(1 if failures > 0 else 0)
